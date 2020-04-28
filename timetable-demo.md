@@ -9,7 +9,7 @@ layout: default
 
 <div class="hero-unit">
     <h1>Paquete</h1>
-    <p>A switchboard for the internet's real-time social life. Things are happening.</p>
+    <p>A switchboard for the internet's livestreams. Things are happening.</p>
 </div>
 
 <div class="timetable"></div>
