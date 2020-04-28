@@ -1,5 +1,5 @@
 ---
-title: WORKING
+title: Paquete
 layout: default
 ---
 
@@ -8,8 +8,8 @@ layout: default
 <link rel="stylesheet" href="timetable/dist/styles/demo.css">
 
 <div class="hero-unit">
-    <h1>Timetable.js demo</h1>
-    <p>Vanilla javascript plugin for building nice responsive timetables. More info on <a href="https://github.com/Grible/timetable.js" target="_blank">Github</a>.</p>
+    <h1>Paquete</h1>
+    <p>A switchboard for the internet's real-time social life. Things are happening.</p>
 </div>
 
 <div class="timetable"></div>
