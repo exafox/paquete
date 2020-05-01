@@ -1,0 +1,12 @@
+{
+  "css.validate": false,
+  "editor.rulers": [80],
+  "eslint.enable": true,
+  "eslint.run": "onType",
+  "eslint.validate": ["javascript", "javascriptreact", "json", "html", "vue"],
+  "files.autoSave": "off",
+  "stylelint.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

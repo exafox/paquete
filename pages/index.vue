@@ -1,73 +1,61 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        paquete
-      </h1>
-      <h2 class="subtitle">
-        Globe video pages
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+  <div>
+    <TimeTable
+      :channels="channels"
+      :events="upcomingEvents"
+      :current-time="currentTime"
+      :start-time="startTime"
+      :hours-to-display="hoursToDisplay"
+      class="w-full"
+    />
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import addHours from 'date-fns/addHours';
+import isAfter from 'date-fns/isAfter';
+import isBefore from 'date-fns/isBefore';
+import uniq from 'lodash/uniq';
+import TimeTable from '~/components/TimeTable';
+import getNearestStartTime from '~/util/getNearestStartTime';
+import { fetchData } from '~/services/api';
 
 export default {
-  components: {
-    Logo
-  }
-}
+  name: 'Homepage',
+  components: { TimeTable },
+  data() {
+    return {
+      currentTime: new Date(),
+      events: [],
+      hoursToDisplay: 6,
+    };
+  },
+  computed: {
+    channels() {
+      return uniq(this.events.map((item) => item.category)).sort();
+    },
+    startTime() {
+      return getNearestStartTime(this.currentTime);
+    },
+    upcomingEvents() {
+      const tableEndTime = addHours(this.startTime, this.hoursToDisplay);
+      return this.events.filter(
+        (event) =>
+          isAfter(event.endTime, this.startTime) &&
+          isBefore(event.startTime, tableEndTime)
+      );
+    },
+  },
+  async created() {
+    this.interval = setInterval(() => {
+      this.currentTime = new Date();
+    }, 60000);
+    this.events = await fetchData();
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
+};
 </script>
 
-<style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-  @apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
+<style></style>
