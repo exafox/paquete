@@ -114,6 +114,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// TODO(jjandoc): Add scroll snapping?
+
 .time-slot {
   @apply flex items-center bg-gray-600 font-bold px-6 py-1 text-sm text-white whitespace-no-wrap;
   grid-row: times;
