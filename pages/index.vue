@@ -46,7 +46,9 @@ export default {
   },
   computed: {
     channels() {
-      return uniq(this.events.map((item) => item.category)).sort();
+      return uniq(this.events.map((item) => item.category))
+        .filter((item) => item)
+        .sort();
     },
     startTime() {
       return getNearestStartTime(this.currentTime);
