@@ -1,7 +1,10 @@
 <template>
-  <div class="time-table bg-blue-400 grid overflow-auto" :style="tableStyles">
+  <div
+    class="time-table bg-blue-400 grid overflow-auto relative"
+    :style="tableStyles"
+  >
     <!-- Timeslot Labels -->
-    <div class="time-slot bg-gray-700 sticky left-0 pl-2 top-0 z-10">
+    <div class="time-slot bg-gray-700 sticky left-0 pl-2 top-0 z-40">
       {{ formatDate(currentTime) }}
     </div>
     <div
@@ -11,6 +14,13 @@
     >
       {{ formatDate(date) }}
     </div>
+
+    <!-- Vertical grid lines -->
+    <div
+      v-for="date in timeslots"
+      :key="`grid-${date.toISOString()}`"
+      class="vertical-grid-line sticky top-0"
+    />
 
     <!-- Channel Labels -->
     <div v-for="channel in channels" :key="channel" class="channel">
@@ -22,7 +32,7 @@
       v-for="item in events"
       :key="item.id"
       :style="getEventStyles(item)"
-      class="bg-blue-600 text-white p-2 text-xs text-left"
+      class="bg-blue-600 text-white p-2 relative text-xs text-left z-10"
       type="button"
       @click="$emit('eventClick', item)"
     >
@@ -120,12 +130,34 @@ export default {
 // TODO(jjandoc): Add scroll snapping?
 
 .time-slot {
-  @apply flex items-center bg-gray-600 font-bold px-6 py-1 text-sm text-white whitespace-no-wrap;
+  @apply flex items-center bg-gray-600 font-bold px-6 py-1 text-sm text-white whitespace-no-wrap z-30;
   grid-row: times;
 }
 
+.vertical-grid-line {
+  height: 0;
+
+  &::after {
+    @apply absolute block bg-white opacity-25 top-0;
+    // bottom: calc(-50vh + 32px);
+    content: '';
+    height: 50vh;
+    right: -1px;
+    width: 1px;
+  }
+}
+
 .channel {
-  @apply flex items-center bg-gray-300 font-bold left-0 p-2 sticky;
+  @apply flex items-center bg-gray-300 font-bold left-0 p-2 sticky z-20;
   grid-column: channels;
+
+  // Horizontal grid lines
+  &::after {
+    @apply absolute block bg-white left-0 opacity-25;
+    top: -1px;
+    content: '';
+    height: 1px;
+    width: 100vw;
+  }
 }
 </style>
