@@ -1,6 +1,7 @@
 <template>
-  <div v-if="!isLoading">
+  <div>
     <TimeTable
+      v-if="!isLoading"
       :channels="channels"
       :events="upcomingEvents"
       :current-time="currentTime"
@@ -8,8 +9,10 @@
       :hours-to-display="hoursToDisplay"
       class="w-full"
     />
+    <transition name="slow-fade">
+      <LoadingScreen v-if="isLoading" />
+    </transition>
   </div>
-  <LoadingScreen v-else />
 </template>
 
 <script>
@@ -65,4 +68,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.slow-fade-leave {
+  opacity: 1;
+
+  &-active {
+    transition: opacity 0.5s ease;
+  }
+
+  &-to {
+    opacity: 0;
+  }
+}
+</style>
