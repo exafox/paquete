@@ -1,4 +1,4 @@
-import addHours from 'date-fns/addHours';
+import addMinutes from 'date-fns/addMinutes';
 import axios from 'axios';
 import get from 'lodash/get';
 import { toDate } from 'date-fns-tz';
@@ -17,11 +17,10 @@ const api = axios.create({
   headers,
 });
 
-const durationToHours = (str) => {
+const durationToMinutes = (str) => {
   const [hoursStr, minutesStr] = str.split(':');
   const hours = parseInt(hoursStr, 10);
-  const partialHour = parseInt(minutesStr, 10) / 60;
-  return hours + partialHour;
+  return hours * 60 + parseInt(minutesStr, 10);
 };
 
 const mapEntry = (entry) => {
@@ -40,12 +39,12 @@ const mapEntry = (entry) => {
     timeZone: 'America/New_York',
   });
   const endTimeStr = get(entry, 'gsx$endtime.$t', null);
-  const duration = durationToHours(
+  const duration = durationToMinutes(
     get(entry, 'gsx$durationoptional.$t') || '1:00'
   );
   const endTime = endTimeStr
     ? toDate(new Date(endTimeStr + ' EDT'), { timeZone: 'America/New_York' })
-    : addHours(startTime, duration);
+    : addMinutes(startTime, duration);
 
   return {
     title,
