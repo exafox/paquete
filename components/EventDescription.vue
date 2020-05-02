@@ -12,7 +12,7 @@
       <div v-if="event.description" class="mt-2 text-lg">
         {{ event.description }}
       </div>
-      <div class="flex -mx-2 mt-8">
+      <div class="flex flex-wrap -mx-2 mt-8">
         <BaseButton
           v-if="event.link"
           tag="a"
@@ -26,6 +26,7 @@
         <BaseButton
           v-if="event.descriptionLink"
           tag="a"
+          variant="secondary"
           :href="event.descriptionLink"
           target="_blank"
           rel="noopener noreferrer"
@@ -36,6 +37,7 @@
         <BaseButton
           v-if="event.donationLink"
           tag="a"
+          variant="secondary"
           :href="event.donationLink"
           target="_blank"
           rel="noopener noreferrer"
