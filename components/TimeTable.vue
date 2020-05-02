@@ -41,8 +41,8 @@
 
 <script>
 import addMinutes from 'date-fns/addMinutes';
-import format from 'date-fns/format';
 import kebabCase from 'lodash/kebabCase';
+import { format } from 'date-fns-tz';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import getNearestEndTime from '~/util/getNearestEndTime';
 
@@ -84,7 +84,12 @@ export default {
         'grid-gap': '1px',
         'grid-template-columns': [
           '[channels] auto',
-          ...this.timeslots.map((time) => `[time-${format(time, 'HHmm')}] 1fr`),
+          ...this.timeslots.map(
+            (time) =>
+              `[time-${format(time, 'HHmm', {
+                timeZone: 'America/New_York',
+              })}] 1fr`
+          ),
         ].join(' '),
         'grid-template-rows': [
           '[times] auto',
@@ -97,12 +102,15 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return format(date, 'h:mm a');
+      return format(date, 'h:mm a', { timeZone: 'America/New_York' });
     },
     getEventStyles(event) {
-      // TODO(jjandoc): Need to deal with events that extend to the next day.
       const { category, endTime, startTime } = event;
-      const startStr = format(getNearestStartTime(startTime), 'HHmm');
+      const displayedStartTime =
+        startTime < this.startTime ? this.startTime : startTime;
+      const startStr = format(getNearestStartTime(displayedStartTime), 'HHmm', {
+        timeZone: 'America/New_York',
+      });
       const endStr = format(getNearestEndTime(endTime), 'HHmm');
       return {
         'grid-row': `channel-${kebabCase(category)}`,

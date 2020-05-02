@@ -38,7 +38,10 @@ export default {
       return getNearestStartTime(this.currentTime);
     },
     upcomingEvents() {
-      const tableEndTime = addHours(this.startTime, this.hoursToDisplay);
+      const tableEndTime = addHours(
+        this.startTime,
+        this.hoursToDisplay - 0.0167
+      );
       return this.events.filter(
         (event) =>
           isAfter(event.endTime, this.startTime) &&
