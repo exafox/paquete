@@ -1,6 +1,10 @@
 <template>
   <div
+    ref="container"
     class="time-table bg-blue-400 grid overflow-auto relative"
+    :class="{
+      'no-scroll-bars': !showScrollBars,
+    }"
     :style="tableStyles"
   >
     <!-- Timeslot Labels -->
@@ -41,6 +45,31 @@
         {{ formatDate(item.startTime) }} - {{ formatDate(item.endTime) }}
       </div>
     </button>
+
+    <!-- Cloned elements for autoscrolling -->
+    <template v-if="autoScroll">
+      <div
+        v-for="channel in channels"
+        :key="`${channel}-clone`"
+        class="channel"
+      >
+        {{ channel }}
+      </div>
+
+      <button
+        v-for="item in events"
+        :key="`${item.id}-clone`"
+        :style="getEventStyles(item, true)"
+        class="bg-blue-600 text-white p-2 relative text-xs text-left z-10"
+        type="button"
+        @click="$emit('eventClick', item)"
+      >
+        <div class="font-bold text-sm">{{ item.title }}</div>
+        <div>
+          {{ formatDate(item.startTime) }} - {{ formatDate(item.endTime) }}
+        </div>
+      </button>
+    </template>
   </div>
 </template>
 
@@ -53,6 +82,10 @@ import getNearestEndTime from '~/util/getNearestEndTime';
 
 export default {
   props: {
+    autoScroll: {
+      type: Boolean,
+      default: true,
+    },
     channels: {
       type: Array,
       default: () => [],
@@ -68,6 +101,10 @@ export default {
     hoursToDisplay: {
       type: Number,
       default: 6,
+    },
+    showScrollBars: {
+      type: Boolean,
+      default: false,
     },
     startTime: {
       type: Date,
@@ -101,15 +138,44 @@ export default {
           ...this.channels.map(
             (channel) => `[channel-${kebabCase(channel)}] auto`
           ),
+          ...this.channels.map(
+            (channel) => `[channel-${kebabCase(channel)}-clone] auto`
+          ),
         ].join(' '),
       };
     },
+  },
+  watch: {
+    autoScroll: {
+      handler(newVal) {
+        clearInterval(this.interval);
+        if (newVal) {
+          this.interval = setInterval(() => {
+            if (!this.$refs.container) return;
+            const currentScrollTop = this.$refs.container.scrollTop;
+            const containerHeight = this.$refs.container.offsetHeight;
+            const newScrollTop =
+              currentScrollTop >= 2 * containerHeight
+                ? 0
+                : currentScrollTop + 1;
+            this.$refs.container.scrollTop = newScrollTop;
+          }, 80);
+        }
+      },
+      immediate: true,
+    },
+  },
+  created() {
+    this.interval = null;
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   },
   methods: {
     formatDate(date) {
       return format(date, 'h:mm a', { timeZone: 'America/New_York' });
     },
-    getEventStyles(event) {
+    getEventStyles(event, isClone = false) {
       const { category, endTime, startTime } = event;
       const displayedStartTime =
         startTime < this.startTime ? this.startTime : startTime;
@@ -118,7 +184,8 @@ export default {
       });
       const endStr = format(getNearestEndTime(endTime), 'HHmm');
       return {
-        'grid-row': `channel-${kebabCase(category)}`,
+        'grid-row': `channel-${kebabCase(category) +
+          (isClone ? '-clone' : '')}`,
         'grid-column': `time-${startStr} / time-${endStr}`,
       };
     },
@@ -127,7 +194,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// TODO(jjandoc): Add scroll snapping?
+.time-table.no-scroll-bars {
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 .time-slot {
   @apply flex items-center bg-gray-600 font-bold px-6 py-1 text-sm text-white whitespace-no-wrap z-30;
