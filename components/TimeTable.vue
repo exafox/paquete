@@ -34,7 +34,6 @@
       <div>
         {{ formatDate(item.startTime) }} - {{ formatDate(item.endTime) }}
       </div>
-      <div v-if="item.description" class="mt-1">{{ item.description }}</div>
     </a>
   </div>
 </template>
