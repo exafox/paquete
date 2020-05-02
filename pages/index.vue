@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isLoading">
     <TimeTable
       :channels="channels"
       :events="upcomingEvents"
@@ -9,6 +9,7 @@
       class="w-full"
     />
   </div>
+  <LoadingScreen v-else />
 </template>
 
 <script>
@@ -16,18 +17,20 @@ import addHours from 'date-fns/addHours';
 import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
 import uniq from 'lodash/uniq';
+import LoadingScreen from '~/components/LoadingScreen';
 import TimeTable from '~/components/TimeTable';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import { fetchData } from '~/services/api';
 
 export default {
   name: 'Homepage',
-  components: { TimeTable },
+  components: { LoadingScreen, TimeTable },
   data() {
     return {
       currentTime: new Date(),
       events: [],
       hoursToDisplay: 6,
+      isLoading: true,
     };
   },
   computed: {
@@ -54,6 +57,7 @@ export default {
       this.currentTime = new Date();
     }, 60000);
     this.events = await fetchData();
+    this.isLoading = false;
   },
   beforeDestroy() {
     clearInterval(this.interval);
