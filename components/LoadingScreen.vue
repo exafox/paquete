@@ -1,5 +1,7 @@
 <template>
-  <div class="loading-screen flex items-center justify-center fixed inset-0">
+  <div
+    class="loading-screen flex items-center justify-center fixed inset-0 z-50"
+  >
     <div class="noise-wrapper"><div class="noise" /></div>
     <div class="loading" data-text="LOADING">LOADING</div>
   </div>

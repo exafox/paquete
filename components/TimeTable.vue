@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="time-table bg-blue-400 grid h-screen max-w-full overflow-auto"
-    :style="tableStyles"
-  >
+  <div class="time-table bg-blue-400 grid overflow-auto" :style="tableStyles">
     <!-- Timeslot Labels -->
     <div class="time-slot bg-gray-700 sticky left-0 pl-2 top-0 z-10">
       {{ formatDate(currentTime) }}
@@ -21,20 +18,19 @@
     </div>
 
     <!-- Events -->
-    <a
+    <button
       v-for="item in events"
-      :key="item.link"
-      :href="item.link"
-      target="_blank"
-      rel="noopener noreferrer"
+      :key="item.id"
       :style="getEventStyles(item)"
-      class="bg-blue-600 text-white p-2 text-xs"
+      class="bg-blue-600 text-white p-2 text-xs text-left"
+      type="button"
+      @click="$emit('eventClick', item)"
     >
       <div class="font-bold text-sm">{{ item.title }}</div>
       <div>
         {{ formatDate(item.startTime) }} - {{ formatDate(item.endTime) }}
       </div>
-    </a>
+    </button>
   </div>
 </template>
 
