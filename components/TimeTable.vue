@@ -36,7 +36,11 @@
       v-for="item in events"
       :key="item.id"
       :style="getEventStyles(item)"
-      class="bg-blue-600 text-white p-2 relative text-xs text-left z-10"
+      class="text-white p-2 relative text-xs text-left z-10"
+      :class="{
+        'bg-blue-600': item !== selectedEvent,
+        'bg-orange-600': item === selectedEvent,
+      }"
       type="button"
       @click="$emit('eventClick', item)"
     >
@@ -52,6 +56,7 @@
         v-for="channel in channels"
         :key="`${channel}-clone`"
         class="channel"
+        aria-hidden="true"
       >
         {{ channel }}
       </div>
@@ -60,8 +65,14 @@
         v-for="item in events"
         :key="`${item.id}-clone`"
         :style="getEventStyles(item, true)"
-        class="bg-blue-600 text-white p-2 relative text-xs text-left z-10"
+        class="text-white p-2 relative text-xs text-left z-10"
+        :class="{
+          'bg-blue-600': item !== selectedEvent,
+          'bg-orange-600': item === selectedEvent,
+        }"
         type="button"
+        tabindex="-1"
+        aria-hidden="true"
         @click="$emit('eventClick', item)"
       >
         <div class="font-bold text-sm">{{ item.title }}</div>
@@ -101,6 +112,10 @@ export default {
     hoursToDisplay: {
       type: Number,
       default: 6,
+    },
+    selectedEvent: {
+      type: Object,
+      default: null,
     },
     showScrollBars: {
       type: Boolean,
