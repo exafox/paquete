@@ -1,18 +1,20 @@
 <template>
   <div class="flex flex-wrap flex-row-reverse">
-    <div class="video bg-black w-1/2"></div>
-    <div
-      class="bg-blue-500 description flex flex-col overflow-auto p-4 md:p-8 text-white w-1/2"
-    >
-      <EventDescription :event="selectedEvent" />
-    </div>
+    <template v-if="$mq !== 'sm'">
+      <div class="video bg-black w-1/2"></div>
+      <div class="description flex flex-col overflow-auto p-12 w-1/2">
+        <EventDescription :event="selectedEvent" />
+      </div>
+    </template>
     <TimeTable
+      :auto-scroll="autoScroll"
       :channels="channels"
       :events="upcomingEvents"
       :current-time="currentTime"
       :start-time="startTime"
       :hours-to-display="hoursToDisplay"
       :selected-event="selectedEvent"
+      :show-inline-descriptions="$mq === 'sm'"
       class="w-full"
       @eventClick="handleEventClick"
     />
@@ -38,17 +40,19 @@ export default {
   components: { EventDescription, LoadingScreen, TimeTable },
   data() {
     return {
+      autoScroll: false,
       currentTime: new Date(),
       events: [],
       hoursToDisplay: 6,
       isLoading: true,
+      hasTouchedAutoScroll: false,
       hasTouchedTimeTable: false,
       selectedEvent: null,
     };
   },
   computed: {
     channels() {
-      return uniq(this.events.map((item) => item.category))
+      return uniq(this.events.map((item) => item.channel))
         .filter((item) => item)
         .sort();
     },
@@ -73,6 +77,20 @@ export default {
         clearInterval(this.randomizerInterval);
       }
     },
+    $mq: {
+      handler(newVal) {
+        if (newVal === 'sm') {
+          this.autoScroll = false;
+        } else {
+          if (!this.hasTouchedAutoScroll) {
+            this.autoScroll = true;
+          }
+          if (!this.selectedEvent) {
+            this.pickRandomEvent();
+          }
+        }
+      },
+    },
   },
   async created() {
     this.timeInterval = setInterval(() => {
@@ -80,9 +98,11 @@ export default {
     }, 60000);
     this.events = await fetchData();
     this.isLoading = false;
-    await this.$nextTick();
-    this.pickRandomEvent();
     this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
+    if (this.$mq !== 'sm') {
+      this.pickRandomEvent();
+      this.autoScroll = true;
+    }
   },
   beforeDestroy() {
     clearInterval(this.timeInterval);
@@ -94,7 +114,7 @@ export default {
       this.hasTouchedTimeTable = true;
     },
     pickRandomEvent() {
-      if (!this.upcomingEvents.length) return;
+      if (!this.upcomingEvents.length || this.$mq === 'sm') return;
       const getNewEvent = () =>
         this.upcomingEvents[
           Math.floor(Math.random() * this.upcomingEvents.length)
@@ -124,9 +144,15 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.video,
-.description,
 .time-table {
-  height: 50vh;
+  height: 100vh;
+}
+
+@media screen and (min-width: 768px) {
+  .video,
+  .description,
+  .time-table {
+    height: 50vh;
+  }
 }
 </style>

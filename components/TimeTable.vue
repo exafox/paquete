@@ -1,21 +1,17 @@
 <template>
   <div
     ref="container"
-    class="time-table bg-blue-400 grid overflow-auto relative"
+    class="time-table bg-gray grid overflow-auto relative"
     :class="{
       'no-scroll-bars': !showScrollBars,
     }"
     :style="tableStyles"
   >
     <!-- Timeslot Labels -->
-    <div class="time-slot bg-gray-700 sticky left-0 pl-2 top-0 z-40">
+    <div class="time-slot left-0 z-40">
       {{ formatDate(currentTime) }}
     </div>
-    <div
-      v-for="date in timeslots"
-      :key="date.toISOString()"
-      class="time-slot sticky justify-center top-0"
-    >
+    <div v-for="date in timeslots" :key="date.toISOString()" class="time-slot">
       {{ formatDate(date) }}
     </div>
 
@@ -37,30 +33,31 @@
       :key="item.id"
       :event="item"
       :is-selected="selectedEvent === item"
+      :show-inline-description="showInlineDescriptions"
       :time-table-start="startTime"
       @click="$emit('eventClick', $event)"
     />
 
-    <!-- Cloned elements for autoscrolling -->
-    <template v-if="autoScroll">
-      <div
-        v-for="channel in channels"
-        :key="`${channel}-clone`"
-        class="channel"
-        aria-hidden="true"
-      >
-        {{ channel }}
-      </div>
-      <TimeTableEvent
-        v-for="item in events"
-        :key="`${item.id}-clone`"
-        :event="item"
-        :is-clone="true"
-        :is-selected="selectedEvent === item"
-        :time-table-start="startTime"
-        @click="$emit('eventClick', $event)"
-      />
-    </template>
+    <!-- Cloned elements for infinite scrolling -->
+    <div
+      v-for="channel in channels"
+      :key="`${channel}-clone`"
+      :ref="`${channel}-clone`"
+      class="channel"
+      aria-hidden="true"
+    >
+      {{ channel }}
+    </div>
+    <TimeTableEvent
+      v-for="item in events"
+      :key="`${item.id}-clone`"
+      :event="item"
+      :is-clone="true"
+      :is-selected="selectedEvent === item"
+      :show-inline-description="showInlineDescriptions"
+      :time-table-start="startTime"
+      @click="$emit('eventClick', $event)"
+    />
   </div>
 </template>
 
@@ -98,6 +95,10 @@ export default {
       type: Object,
       default: null,
     },
+    showInlineDescriptions: {
+      type: Boolean,
+      default: false,
+    },
     showScrollBars: {
       type: Boolean,
       default: false,
@@ -119,7 +120,6 @@ export default {
     },
     tableStyles() {
       return {
-        'grid-gap': '1px',
         'grid-template-columns': [
           '[channels] auto',
           ...this.timeslots.map(
@@ -141,39 +141,45 @@ export default {
       };
     },
   },
-  watch: {
-    autoScroll: {
-      handler(newVal) {
-        clearInterval(this.interval);
-        if (newVal) {
-          this.interval = setInterval(() => {
-            if (!this.$refs.container) return;
-            const currentScrollTop = this.$refs.container.scrollTop;
-            const containerHeight = this.$refs.container.offsetHeight;
-            const newScrollTop =
-              currentScrollTop >= 2 * containerHeight
-                ? 0
-                : currentScrollTop + 1;
-            this.$refs.container.scrollTop = newScrollTop;
-          }, 80);
-        }
-      },
-      immediate: true,
-    },
-  },
   created() {
-    this.interval = null;
+    this.interval = setInterval(() => {
+      if (!this.$refs.container) return;
+      const currentScrollTop = this.$refs.container.scrollTop;
+      const scrollHeight = this.$refs.container.scrollHeight;
+      const clonesHeight = this.getCloneHeight();
+      let newScrollTop = 1;
+      if (currentScrollTop <= 0) {
+        newScrollTop = clonesHeight;
+      } else if (currentScrollTop + clonesHeight < scrollHeight) {
+        newScrollTop = currentScrollTop + (this.autoScroll ? 1 : 0);
+      }
+      this.$refs.container.scrollTop = newScrollTop;
+    }, 80);
   },
   beforeDestroy() {
     clearInterval(this.interval);
   },
   methods: {
     formatDate,
+    getCloneHeight() {
+      return Object.entries(this.$refs).reduce((acc, [key, el]) => {
+        if (key.includes('-clone') && el) {
+          acc += el[0].offsetHeight;
+        }
+        return acc;
+      }, 0);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+$grid-gap: 5px;
+
+.time-table {
+  grid-gap: $grid-gap;
+}
+
 .time-table.no-scroll-bars {
   -ms-overflow-style: none;
 
@@ -183,32 +189,39 @@ export default {
 }
 
 .time-slot {
-  @apply flex items-center bg-gray-600 font-bold px-6 py-1 text-sm text-white whitespace-no-wrap z-30;
+  @apply flex items-center bg-blue font-bold justify-center px-6 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
   grid-row: times;
+
+  &::after {
+    @apply absolute block bg-white inset-y-0;
+    content: '';
+    right: -$grid-gap;
+    width: $grid-gap;
+  }
 }
 
 .vertical-grid-line {
   height: 0;
 
   &::after {
-    @apply absolute block bg-white opacity-25 top-0;
+    @apply absolute block bg-white top-0;
     content: '';
-    height: 50vh;
-    right: -1px;
-    width: 1px;
+    height: 100vh;
+    right: -$grid-gap;
+    width: $grid-gap;
   }
 }
 
 .channel {
-  @apply flex items-center bg-gray-300 font-bold left-0 p-2 sticky z-20;
+  @apply bg-navy flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow uppercase z-20;
   grid-column: channels;
 
   // Horizontal grid lines
   &::after {
-    @apply absolute block bg-white left-0 opacity-25;
-    top: -1px;
+    @apply absolute block bg-white left-0;
     content: '';
-    height: 1px;
+    height: $grid-gap;
+    top: -$grid-gap;
     width: 100vw;
   }
 }
