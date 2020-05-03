@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     channels() {
-      return uniq(this.events.map((item) => item.category))
+      return uniq(this.events.map((item) => item.channel))
         .filter((item) => item)
         .sort();
     },

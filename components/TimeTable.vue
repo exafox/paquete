@@ -1,7 +1,7 @@
 <template>
   <div
     ref="container"
-    class="time-table bg-gray-200 grid overflow-auto relative"
+    class="time-table bg-gray grid overflow-auto relative"
     :class="{
       'no-scroll-bars': !showScrollBars,
     }"
@@ -187,7 +187,7 @@ $grid-gap: 5px;
 }
 
 .time-slot {
-  @apply flex items-center bg-blue-700 font-bold justify-center px-6 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
+  @apply flex items-center bg-blue font-bold justify-center px-6 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
   grid-row: times;
 
   &::after {
@@ -211,15 +211,15 @@ $grid-gap: 5px;
 }
 
 .channel {
-  @apply bg-blue-800 flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow-400 uppercase z-20;
+  @apply bg-navy flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow uppercase z-20;
   grid-column: channels;
 
   // Horizontal grid lines
   &::after {
     @apply absolute block bg-white left-0;
-    top: -$grid-gap;
     content: '';
     height: $grid-gap;
+    top: -$grid-gap;
     width: 100vw;
   }
 }

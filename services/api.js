@@ -30,11 +30,11 @@ const mapEntry = (entry) => {
 
   const id = get(entry, 'id.$t', title);
   const link = get(entry, 'gsx$streamlink.$t', '');
-  const category = get(entry, 'gsx$category.$t', '');
-  const channel = get(entry, 'gsx$channelorhandle.$t', '');
+  const channel = get(entry, 'gsx$channel.$t', '');
   const description = get(entry, 'gsx$descriptionoptional.$t', '');
   const descriptionLink = get(entry, 'gsx$descriptionpagelinkoptional.$t', '');
   const donationLink = get(entry, 'gsx$donationpagelinkoptional.$t', '');
+  const handle = get(entry, 'gsx$handle.$t', '');
   const startTime = toDate(new Date(startTimeStr + ' EDT'), {
     timeZone: 'America/New_York',
   });
@@ -50,11 +50,11 @@ const mapEntry = (entry) => {
     title,
     id,
     link,
-    category,
     channel,
     description,
     descriptionLink,
     donationLink,
+    handle,
     startTime,
     endTime,
   };

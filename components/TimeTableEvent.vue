@@ -3,7 +3,7 @@
     :style="styles"
     class="p-2 relative text-xs text-left z-10"
     :class="{
-      'bg-blue-600 text-white': !isSelected,
+      'bg-blue text-white': !isSelected,
       'bg-white': isSelected,
     }"
     type="button"
@@ -68,7 +68,7 @@ export default {
       return formatDate(this.event.startTime);
     },
     styles() {
-      const { category, endTime, startTime } = this.event;
+      const { channel, endTime, startTime } = this.event;
       const displayedStartTime =
         startTime < this.timeTableStart ? this.timeTableStart : startTime;
       const startStr = format(getNearestStartTime(displayedStartTime), 'HHmm', {
@@ -76,7 +76,7 @@ export default {
       });
       const endStr = format(getNearestEndTime(endTime), 'HHmm');
       return {
-        'grid-row': `channel-${kebabCase(category) +
+        'grid-row': `channel-${kebabCase(channel) +
           (this.isClone ? '-clone' : '')}`,
         'grid-column': `time-${startStr} / time-${endStr}`,
       };
