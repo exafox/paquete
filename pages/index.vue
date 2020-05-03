@@ -12,8 +12,9 @@
       :current-time="currentTime"
       :start-time="startTime"
       :hours-to-display="hoursToDisplay"
+      :selected-event="selectedEvent"
       class="w-full"
-      @eventClick="selectedEvent = $event"
+      @eventClick="handleEventClick"
     />
     <transition name="slow-fade">
       <LoadingScreen v-if="isLoading" />
@@ -41,12 +42,15 @@ export default {
       events: [],
       hoursToDisplay: 6,
       isLoading: true,
+      hasTouchedTimeTable: false,
       selectedEvent: null,
     };
   },
   computed: {
     channels() {
-      return uniq(this.events.map((item) => item.category)).sort();
+      return uniq(this.events.map((item) => item.category))
+        .filter((item) => item)
+        .sort();
     },
     startTime() {
       return getNearestStartTime(this.currentTime);
@@ -64,21 +68,43 @@ export default {
     },
   },
   watch: {
-    upcomingEvents(newVal) {
-      if (newVal.length && !this.selectedEvent) {
-        this.selectedEvent = newVal[0];
+    hasTouchedTimeTable(newVal) {
+      if (newVal) {
+        clearInterval(this.randomizerInterval);
       }
     },
   },
   async created() {
-    this.interval = setInterval(() => {
+    this.timeInterval = setInterval(() => {
       this.currentTime = new Date();
     }, 60000);
     this.events = await fetchData();
     this.isLoading = false;
+    await this.$nextTick();
+    this.pickRandomEvent();
+    this.randomizerInterval = setInterval(this.pickRandomEvent, 10000);
   },
   beforeDestroy() {
-    clearInterval(this.interval);
+    clearInterval(this.timeInterval);
+    clearInterval(this.randomizerInterval);
+  },
+  methods: {
+    handleEventClick(event) {
+      this.selectedEvent = event;
+      this.hasTouchedTimeTable = true;
+    },
+    pickRandomEvent() {
+      if (!this.upcomingEvents.length) return;
+      const getNewEvent = () =>
+        this.upcomingEvents[
+          Math.floor(Math.random() * this.upcomingEvents.length)
+        ];
+      let newEvent;
+      do {
+        newEvent = getNewEvent();
+      } while (newEvent === this.selectedEvent);
+      this.selectedEvent = newEvent;
+    },
   },
 };
 </script>
