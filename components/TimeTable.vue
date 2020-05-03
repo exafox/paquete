@@ -1,21 +1,17 @@
 <template>
   <div
     ref="container"
-    class="time-table bg-blue-400 grid overflow-auto relative"
+    class="time-table bg-gray-200 grid overflow-auto relative"
     :class="{
       'no-scroll-bars': !showScrollBars,
     }"
     :style="tableStyles"
   >
     <!-- Timeslot Labels -->
-    <div class="time-slot bg-gray-700 sticky left-0 pl-2 top-0 z-40">
+    <div class="time-slot left-0 z-40">
       {{ formatDate(currentTime) }}
     </div>
-    <div
-      v-for="date in timeslots"
-      :key="date.toISOString()"
-      class="time-slot sticky justify-center top-0"
-    >
+    <div v-for="date in timeslots" :key="date.toISOString()" class="time-slot">
       {{ formatDate(date) }}
     </div>
 
@@ -118,7 +114,6 @@ export default {
     },
     tableStyles() {
       return {
-        'grid-gap': '1px',
         'grid-template-columns': [
           '[channels] auto',
           ...this.timeslots.map(
@@ -182,6 +177,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$grid-gap: 5px;
+
+.time-table {
+  grid-gap: $grid-gap;
+}
+
 .time-table.no-scroll-bars {
   -ms-overflow-style: none;
 
@@ -191,32 +192,39 @@ export default {
 }
 
 .time-slot {
-  @apply flex items-center bg-gray-600 font-bold px-6 py-1 text-sm text-white whitespace-no-wrap z-30;
+  @apply flex items-center bg-blue-700 font-bold justify-center px-6 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
   grid-row: times;
+
+  &::after {
+    @apply absolute block bg-white inset-y-0;
+    content: '';
+    right: -$grid-gap;
+    width: $grid-gap;
+  }
 }
 
 .vertical-grid-line {
   height: 0;
 
   &::after {
-    @apply absolute block bg-white opacity-25 top-0;
+    @apply absolute block bg-white top-0;
     content: '';
     height: 100vh;
-    right: -1px;
-    width: 1px;
+    right: -$grid-gap;
+    width: $grid-gap;
   }
 }
 
 .channel {
-  @apply flex items-center bg-gray-300 font-bold left-0 p-2 sticky z-20;
+  @apply bg-blue-800 flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow-400 uppercase z-20;
   grid-column: channels;
 
   // Horizontal grid lines
   &::after {
-    @apply absolute block bg-white left-0 opacity-25;
-    top: -1px;
+    @apply absolute block bg-white left-0;
+    top: -$grid-gap;
     content: '';
-    height: 1px;
+    height: $grid-gap;
     width: 100vw;
   }
 }

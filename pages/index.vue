@@ -2,9 +2,7 @@
   <div class="flex flex-wrap flex-row-reverse">
     <template v-if="$mq !== 'sm'">
       <div class="video bg-black w-1/2"></div>
-      <div
-        class="bg-blue-500 description flex flex-col overflow-auto p-4 md:p-8 text-white w-1/2"
-      >
+      <div class="description flex flex-col overflow-auto p-12 w-1/2">
         <EventDescription :event="selectedEvent" />
       </div>
     </template>

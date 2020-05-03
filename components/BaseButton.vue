@@ -1,12 +1,10 @@
 <template>
   <component
     :is="tag"
-    class="base-button appearance-none font-bold rounded-sm text-center transition duration-200 ease-in-out whitespace-no-wrap"
+    class="base-button appearance-none font-bold rounded-sm text-center text-white transition duration-200 ease-in-out whitespace-no-wrap"
     :class="{
-      'bg-red-700 hover:bg-red-600 active:bg-red-800 text-white':
-        variant === 'primary',
-      'bg-white hover:bg-blue-800 text-blue-700 hover:text-white':
-        variant === 'secondary',
+      'bg-red-700 hover:bg-red-600 active:bg-red-800': variant === 'primary',
+      'bg-blue-600 hover:bg-blue-800': variant === 'secondary',
       block: block,
       'px-8 py-2 text-lg': size === 'lg',
       'px-6 py-1 text-base': size === 'sm',

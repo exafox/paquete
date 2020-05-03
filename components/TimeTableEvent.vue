@@ -1,10 +1,10 @@
 <template>
   <button
     :style="styles"
-    class="text-white p-2 relative text-xs text-left z-10"
+    class="p-2 relative text-xs text-left z-10"
     :class="{
-      'bg-blue-600': !isSelected,
-      'bg-orange-600': isSelected,
+      'bg-blue-600 text-white': !isSelected,
+      'bg-white': isSelected,
     }"
     type="button"
     tabindex="-1"
