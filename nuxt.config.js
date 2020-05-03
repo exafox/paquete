@@ -38,6 +38,8 @@ export default {
     '@nuxtjs/stylelint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/google-analytics',
+    '@nuxtjs/gtm',
   ],
   /*
    ** Nuxt.js modules
@@ -60,5 +62,11 @@ export default {
         use: ['babel-loader', 'vue-svg-loader'],
       });
     },
+  },
+  googleAnalytics: {
+    id: 'UA-12301-2',
+  },
+  gtm: {
+    id: process.env.GTM_ID,
   },
 };
