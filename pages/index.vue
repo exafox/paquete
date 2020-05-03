@@ -1,11 +1,13 @@
 <template>
   <div class="flex flex-wrap flex-row-reverse">
-    <div class="video bg-black w-1/2"></div>
-    <div
-      class="bg-blue-500 description flex flex-col overflow-auto p-4 md:p-8 text-white w-1/2"
-    >
-      <EventDescription :event="selectedEvent" />
-    </div>
+    <template v-if="$mq !== 'sm'">
+      <div class="video bg-black w-1/2"></div>
+      <div
+        class="bg-blue-500 description flex flex-col overflow-auto p-4 md:p-8 text-white w-1/2"
+      >
+        <EventDescription :event="selectedEvent" />
+      </div>
+    </template>
     <TimeTable
       :channels="channels"
       :events="upcomingEvents"
@@ -124,9 +126,15 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.video,
-.description,
 .time-table {
-  height: 50vh;
+  height: 100vh;
+}
+
+@media screen and (min-width: 768px) {
+  .video,
+  .description,
+  .time-table {
+    height: 50vh;
+  }
 }
 </style>

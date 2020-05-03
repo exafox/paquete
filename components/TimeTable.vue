@@ -41,26 +41,25 @@
       @click="$emit('eventClick', $event)"
     />
 
-    <!-- Cloned elements for autoscrolling -->
-    <template v-if="autoScroll">
-      <div
-        v-for="channel in channels"
-        :key="`${channel}-clone`"
-        class="channel"
-        aria-hidden="true"
-      >
-        {{ channel }}
-      </div>
-      <TimeTableEvent
-        v-for="item in events"
-        :key="`${item.id}-clone`"
-        :event="item"
-        :is-clone="true"
-        :is-selected="selectedEvent === item"
-        :time-table-start="startTime"
-        @click="$emit('eventClick', $event)"
-      />
-    </template>
+    <!-- Cloned elements for infinite scrolling -->
+    <div
+      v-for="channel in channels"
+      :key="`${channel}-clone`"
+      :ref="`${channel}-clone`"
+      class="channel"
+      aria-hidden="true"
+    >
+      {{ channel }}
+    </div>
+    <TimeTableEvent
+      v-for="item in events"
+      :key="`${item.id}-clone`"
+      :event="item"
+      :is-clone="true"
+      :is-selected="selectedEvent === item"
+      :time-table-start="startTime"
+      @click="$emit('eventClick', $event)"
+    />
   </div>
 </template>
 
@@ -149,10 +148,11 @@ export default {
           this.interval = setInterval(() => {
             if (!this.$refs.container) return;
             const currentScrollTop = this.$refs.container.scrollTop;
-            const containerHeight = this.$refs.container.offsetHeight;
+            const scrollHeight = this.$refs.container.scrollHeight;
+            const clonesHeight = this.getCloneHeight();
             const newScrollTop =
-              currentScrollTop >= 2 * containerHeight
-                ? 0
+              currentScrollTop + clonesHeight >= scrollHeight
+                ? 1
                 : currentScrollTop + 1;
             this.$refs.container.scrollTop = newScrollTop;
           }, 80);
@@ -169,6 +169,14 @@ export default {
   },
   methods: {
     formatDate,
+    getCloneHeight() {
+      return Object.entries(this.$refs).reduce((acc, [key, el]) => {
+        if (key.includes('-clone') && el) {
+          acc += el[0].offsetHeight;
+        }
+        return acc;
+      }, 0);
+    },
   },
 };
 </script>
@@ -193,7 +201,7 @@ export default {
   &::after {
     @apply absolute block bg-white opacity-25 top-0;
     content: '';
-    height: 50vh;
+    height: 100vh;
     right: -1px;
     width: 1px;
   }
