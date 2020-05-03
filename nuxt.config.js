@@ -51,6 +51,7 @@ export default {
     ['nuxt-mq', { breakpoints: { sm: 768, tablet: 1024, desktop: Infinity } }],
   ],
   build: {
+    transpile: ['vue-clamp', 'resize-detector'],
     extend: (config) => {
       const svgRule = config.module.rules.find((rule) =>
         rule.test.test('.svg')

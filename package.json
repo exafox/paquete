@@ -30,7 +30,8 @@
     "date-fns-tz": "^1.0.10",
     "lodash": "^4.17.15",
     "nuxt": "^2.0.0",
-    "nuxt-mq": "^2.0.1"
+    "nuxt-mq": "^2.0.1",
+    "vue-clamp": "^0.3.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",

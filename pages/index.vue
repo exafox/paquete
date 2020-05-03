@@ -9,6 +9,7 @@
       </div>
     </template>
     <TimeTable
+      :auto-scroll="autoScroll"
       :channels="channels"
       :events="upcomingEvents"
       :current-time="currentTime"
@@ -40,10 +41,12 @@ export default {
   components: { EventDescription, LoadingScreen, TimeTable },
   data() {
     return {
+      autoScroll: false,
       currentTime: new Date(),
       events: [],
       hoursToDisplay: 6,
       isLoading: true,
+      hasTouchedAutoScroll: false,
       hasTouchedTimeTable: false,
       selectedEvent: null,
     };
@@ -75,6 +78,20 @@ export default {
         clearInterval(this.randomizerInterval);
       }
     },
+    $mq: {
+      handler(newVal) {
+        if (newVal === 'sm') {
+          this.autoScroll = false;
+        } else {
+          if (!this.hasTouchedAutoScroll) {
+            this.autoScroll = true;
+          }
+          if (!this.selectedEvent) {
+            this.pickRandomEvent();
+          }
+        }
+      },
+    },
   },
   async created() {
     this.timeInterval = setInterval(() => {
@@ -82,9 +99,11 @@ export default {
     }, 60000);
     this.events = await fetchData();
     this.isLoading = false;
-    await this.$nextTick();
-    this.pickRandomEvent();
     this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
+    if (this.$mq !== 'sm') {
+      this.pickRandomEvent();
+      this.autoScroll = true;
+    }
   },
   beforeDestroy() {
     clearInterval(this.timeInterval);
@@ -96,7 +115,7 @@ export default {
       this.hasTouchedTimeTable = true;
     },
     pickRandomEvent() {
-      if (!this.upcomingEvents.length) return;
+      if (!this.upcomingEvents.length || this.$mq === 'sm') return;
       const getNewEvent = () =>
         this.upcomingEvents[
           Math.floor(Math.random() * this.upcomingEvents.length)

@@ -13,18 +13,32 @@
   >
     <div class="font-bold text-sm">{{ event.title }}</div>
     <div>{{ startTime }} - {{ endTime }}</div>
+    <template v-if="event.description">
+      <VClamp
+        v-if="$mq !== 'sm' || ($mq === 'sm' && !isSelected)"
+        :max-lines="2"
+        >{{ event.description }}</VClamp
+      >
+      <div v-if="$mq === 'sm' && isSelected">{{ event.description }}</div>
+    </template>
+    <template v-if="$mq === 'sm' && isSelected">
+      <EventLinks class="mt-4" :event="event" />
+    </template>
   </button>
 </template>
 
 <script>
+import VClamp from 'vue-clamp';
 import kebabCase from 'lodash/kebabCase';
 import { format } from 'date-fns-tz';
+import EventLinks from '~/components/EventLinks';
 import TrackingEvents from '~/constants/TrackingEvents';
 import formatDate from '~/util/formatDate';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import getNearestEndTime from '~/util/getNearestEndTime';
 
 export default {
+  components: { EventLinks, VClamp },
   props: {
     event: {
       type: Object,
