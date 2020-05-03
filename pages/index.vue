@@ -33,6 +33,7 @@ import EventDescription from '~/components/EventDescription';
 import LoadingScreen from '~/components/LoadingScreen';
 import TimeTable from '~/components/TimeTable';
 import getNearestStartTime from '~/util/getNearestStartTime';
+import wait from '~/util/wait';
 import { fetchData } from '~/services/api';
 
 export default {
@@ -96,7 +97,12 @@ export default {
     this.timeInterval = setInterval(() => {
       this.currentTime = new Date();
     }, 60000);
-    this.events = await fetchData();
+
+    // Wait for the data, or at least one second - whichever is longer - so that
+    // folks can appreciate the loading screen. Might be a horrible idea.
+    const [events] = await Promise.all([fetchData(), wait(1000)]);
+
+    this.events = events;
     this.isLoading = false;
     this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
     if (this.$mq !== 'sm') {
