@@ -3,8 +3,7 @@ import axios from 'axios';
 import get from 'lodash/get';
 import { toDate } from 'date-fns-tz';
 
-const url =
-  'https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json';
+const url = process.env.SHEETS_URL;
 
 // const baseURL = process.env.API_URL || '';
 const headers = {
