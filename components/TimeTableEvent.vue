@@ -7,8 +7,7 @@
       'bg-white': isSelected,
     }"
     type="button"
-    tabindex="-1"
-    aria-hidden="true"
+    v-bind="accessibilityProps"
     @click="handleClick"
   >
     <div class="font-bold text-sm">{{ event.title }}</div>
@@ -61,6 +60,9 @@ export default {
     },
   },
   computed: {
+    accessibilityProps() {
+      return this.isClone ? { 'aria-hidden': 'true', tabindex: -1 } : {};
+    },
     endTime() {
       return formatDate(this.event.endTime);
     },
