@@ -14,16 +14,15 @@
     <div class="font-bold text-sm">{{ event.title }}</div>
     <div>{{ startTime }} - {{ endTime }}</div>
     <template v-if="event.description">
-      <VClamp
-        v-if="$mq !== 'sm' || ($mq === 'sm' && !isSelected)"
-        :max-lines="2"
-        >{{ event.description }}</VClamp
-      >
-      <div v-if="$mq === 'sm' && isSelected">{{ event.description }}</div>
+      <VClamp :max-lines="showInlineDescription && isSelected ? 0 : 2">{{
+        event.description
+      }}</VClamp>
     </template>
-    <template v-if="$mq === 'sm' && isSelected">
-      <EventLinks class="mt-4" :event="event" />
-    </template>
+    <EventLinks
+      v-if="showInlineDescription && isSelected"
+      class="mt-4"
+      :event="event"
+    />
   </button>
 </template>
 
@@ -49,6 +48,10 @@ export default {
       default: false,
     },
     isSelected: {
+      type: Boolean,
+      default: false,
+    },
+    showInlineDescription: {
       type: Boolean,
       default: false,
     },

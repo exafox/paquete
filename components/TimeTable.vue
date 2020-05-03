@@ -33,6 +33,7 @@
       :key="item.id"
       :event="item"
       :is-selected="selectedEvent === item"
+      :show-inline-description="showInlineDescriptions"
       :time-table-start="startTime"
       @click="$emit('eventClick', $event)"
     />
@@ -53,6 +54,7 @@
       :event="item"
       :is-clone="true"
       :is-selected="selectedEvent === item"
+      :show-inline-description="showInlineDescriptions"
       :time-table-start="startTime"
       @click="$emit('eventClick', $event)"
     />
@@ -92,6 +94,10 @@ export default {
     selectedEvent: {
       type: Object,
       default: null,
+    },
+    showInlineDescriptions: {
+      type: Boolean,
+      default: false,
     },
     showScrollBars: {
       type: Boolean,
@@ -135,29 +141,18 @@ export default {
       };
     },
   },
-  watch: {
-    autoScroll: {
-      handler(newVal) {
-        clearInterval(this.interval);
-        if (newVal) {
-          this.interval = setInterval(() => {
-            if (!this.$refs.container) return;
-            const currentScrollTop = this.$refs.container.scrollTop;
-            const scrollHeight = this.$refs.container.scrollHeight;
-            const clonesHeight = this.getCloneHeight();
-            const newScrollTop =
-              currentScrollTop + clonesHeight >= scrollHeight
-                ? 1
-                : currentScrollTop + 1;
-            this.$refs.container.scrollTop = newScrollTop;
-          }, 80);
-        }
-      },
-      immediate: true,
-    },
-  },
   created() {
-    this.interval = null;
+    this.interval = setInterval(() => {
+      if (!this.$refs.container) return;
+      const currentScrollTop = this.$refs.container.scrollTop;
+      const scrollHeight = this.$refs.container.scrollHeight;
+      const clonesHeight = this.getCloneHeight();
+      const newScrollTop =
+        currentScrollTop + clonesHeight >= scrollHeight
+          ? 0
+          : currentScrollTop + (this.autoScroll ? 1 : 0);
+      this.$refs.container.scrollTop = newScrollTop;
+    }, 80);
   },
   beforeDestroy() {
     clearInterval(this.interval);
