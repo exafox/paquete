@@ -71,12 +71,15 @@ export default {
       return format(date, 'h:mm a', { timeZone: 'America/New_York' });
     },
     trackClick(e) {
-      this.$gtm.push({
+      const link = e.currentTarget.href;
+      const trackingPayload = {
         event: TrackingEvents.CLICKED_EXTERNAL_LINK,
         title: this.event.title,
-        date: this.event.startDate,
-        link: e.currentTarget.href,
-      });
+        date: this.event.startTime,
+        link,
+      };
+      this.$gtm.push(trackingPayload);
+      window.open(link, '_blank');
     },
   },
 };

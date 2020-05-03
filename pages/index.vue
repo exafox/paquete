@@ -82,7 +82,7 @@ export default {
     this.isLoading = false;
     await this.$nextTick();
     this.pickRandomEvent();
-    this.randomizerInterval = setInterval(this.pickRandomEvent, 10000);
+    this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
   },
   beforeDestroy() {
     clearInterval(this.timeInterval);

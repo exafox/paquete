@@ -32,23 +32,14 @@
     </div>
 
     <!-- Events -->
-    <button
+    <TimeTableEvent
       v-for="item in events"
       :key="item.id"
-      :style="getEventStyles(item)"
-      class="text-white p-2 relative text-xs text-left z-10"
-      :class="{
-        'bg-blue-600': item !== selectedEvent,
-        'bg-orange-600': item === selectedEvent,
-      }"
-      type="button"
-      @click="$emit('eventClick', item)"
-    >
-      <div class="font-bold text-sm">{{ item.title }}</div>
-      <div>
-        {{ formatDate(item.startTime) }} - {{ formatDate(item.endTime) }}
-      </div>
-    </button>
+      :event="item"
+      :is-selected="selectedEvent === item"
+      :time-table-start="startTime"
+      @click="$emit('eventClick', $event)"
+    />
 
     <!-- Cloned elements for autoscrolling -->
     <template v-if="autoScroll">
@@ -60,26 +51,15 @@
       >
         {{ channel }}
       </div>
-
-      <button
+      <TimeTableEvent
         v-for="item in events"
         :key="`${item.id}-clone`"
-        :style="getEventStyles(item, true)"
-        class="text-white p-2 relative text-xs text-left z-10"
-        :class="{
-          'bg-blue-600': item !== selectedEvent,
-          'bg-orange-600': item === selectedEvent,
-        }"
-        type="button"
-        tabindex="-1"
-        aria-hidden="true"
-        @click="$emit('eventClick', item)"
-      >
-        <div class="font-bold text-sm">{{ item.title }}</div>
-        <div>
-          {{ formatDate(item.startTime) }} - {{ formatDate(item.endTime) }}
-        </div>
-      </button>
+        :event="item"
+        :is-clone="true"
+        :is-selected="selectedEvent === item"
+        :time-table-start="startTime"
+        @click="$emit('eventClick', $event)"
+      />
     </template>
   </div>
 </template>
@@ -88,10 +68,11 @@
 import addMinutes from 'date-fns/addMinutes';
 import kebabCase from 'lodash/kebabCase';
 import { format } from 'date-fns-tz';
-import getNearestStartTime from '~/util/getNearestStartTime';
-import getNearestEndTime from '~/util/getNearestEndTime';
+import TimeTableEvent from '~/components/TimeTableEvent';
+import formatDate from '~/util/formatDate';
 
 export default {
+  components: { TimeTableEvent },
   props: {
     autoScroll: {
       type: Boolean,
@@ -187,23 +168,7 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
-    formatDate(date) {
-      return format(date, 'h:mm a', { timeZone: 'America/New_York' });
-    },
-    getEventStyles(event, isClone = false) {
-      const { category, endTime, startTime } = event;
-      const displayedStartTime =
-        startTime < this.startTime ? this.startTime : startTime;
-      const startStr = format(getNearestStartTime(displayedStartTime), 'HHmm', {
-        timeZone: 'America/New_York',
-      });
-      const endStr = format(getNearestEndTime(endTime), 'HHmm');
-      return {
-        'grid-row': `channel-${kebabCase(category) +
-          (isClone ? '-clone' : '')}`,
-        'grid-column': `time-${startStr} / time-${endStr}`,
-      };
-    },
+    formatDate,
   },
 };
 </script>
@@ -227,7 +192,6 @@ export default {
 
   &::after {
     @apply absolute block bg-white opacity-25 top-0;
-    // bottom: calc(-50vh + 32px);
     content: '';
     height: 50vh;
     right: -1px;
