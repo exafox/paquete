@@ -147,10 +147,12 @@ export default {
       const currentScrollTop = this.$refs.container.scrollTop;
       const scrollHeight = this.$refs.container.scrollHeight;
       const clonesHeight = this.getCloneHeight();
-      const newScrollTop =
-        currentScrollTop + clonesHeight >= scrollHeight
-          ? 0
-          : currentScrollTop + (this.autoScroll ? 1 : 0);
+      let newScrollTop = 1;
+      if (currentScrollTop <= 0) {
+        newScrollTop = clonesHeight;
+      } else if (currentScrollTop + clonesHeight < scrollHeight) {
+        newScrollTop = currentScrollTop + (this.autoScroll ? 1 : 0);
+      }
       this.$refs.container.scrollTop = newScrollTop;
     }, 80);
   },
