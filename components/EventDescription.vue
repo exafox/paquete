@@ -20,6 +20,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="mx-2 mb-2"
+          @click.prevent="trackClick"
         >
           Watch
         </BaseButton>
@@ -31,6 +32,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="mx-2 mb-2"
+          @click.prevent="trackClick"
         >
           Learn more
         </BaseButton>
@@ -42,6 +44,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="mx-2 mb-2"
+          @click.prevent="trackClick"
         >
           Donate
         </BaseButton>
@@ -53,6 +56,7 @@
 <script>
 import { format } from 'date-fns-tz';
 import BaseButton from '~/components/BaseButton';
+import TrackingEvents from '~/constants/TrackingEvents';
 
 export default {
   components: { BaseButton },
@@ -65,6 +69,17 @@ export default {
   methods: {
     formatDate(date) {
       return format(date, 'h:mm a', { timeZone: 'America/New_York' });
+    },
+    trackClick(e) {
+      const link = e.currentTarget.href;
+      const trackingPayload = {
+        event: TrackingEvents.CLICKED_EXTERNAL_LINK,
+        title: this.event.title,
+        date: this.event.startTime,
+        link,
+      };
+      this.$gtm.push(trackingPayload);
+      window.open(link, '_blank');
     },
   },
 };
