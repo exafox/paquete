@@ -131,6 +131,7 @@ export default {
         ].join(' '),
         'grid-template-rows': [
           '[times] auto',
+          '[grid-lines] 0',
           ...this.channels.map(
             (channel) => `[channel-${kebabCase(channel)}] auto`
           ),
@@ -202,6 +203,7 @@ $grid-gap: 5px;
 
 .vertical-grid-line {
   height: 0;
+  grid-row: grid-lines;
 
   &::after {
     @apply absolute block bg-white top-0;
