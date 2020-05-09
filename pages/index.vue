@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-wrap flex-row-reverse">
     <template v-if="$mq !== 'sm'">
-      <div class="video bg-black w-1/2"></div>
+      <div class="video bg-black w-1/2 relative">
+        <EventPreview v-if="selectedEvent" :event="selectedEvent" />
+      </div>
       <div class="description flex flex-col overflow-auto p-12 w-1/2">
         <EventDescription :event="selectedEvent" />
       </div>
@@ -24,7 +26,10 @@
         tag="button"
         type="button"
         class="mr-2"
-        @click="autoScroll = !autoScroll"
+        @click="
+          autoScroll = !autoScroll;
+          hasTouchedAutoScroll = true;
+        "
       >
         <span class="sr-only">{{
           autoScroll ? 'Start auto-scrolling' : 'Stop auto-scrolling'
@@ -34,6 +39,7 @@
       </FloatingButton>
       <FloatingButton
         title="Submit a stream"
+        class="mr-2"
         tag="a"
         href="https://forms.gle/AJTqLsaVjimqLPsv6"
         target="_blank"
@@ -41,6 +47,15 @@
       >
         <span class="sr-only">Submit a stream</span>
         <span class="relative -mt-1 text-4xl">+</span>
+      </FloatingButton>
+      <FloatingButton
+        title="Donate"
+        tag="button"
+        type="button"
+        @click="handleDonateClick"
+      >
+        <span class="sr-only">Donate</span>
+        <span class="relative text-2xl">$</span>
       </FloatingButton>
     </div>
     <transition name="slow-fade">
@@ -55,6 +70,7 @@ import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
 import uniq from 'lodash/uniq';
 import EventDescription from '~/components/EventDescription';
+import EventPreview from '~/components/EventPreview';
 import FloatingButton from '~/components/FloatingButton';
 import LoadingScreen from '~/components/LoadingScreen';
 import TimeTable from '~/components/TimeTable';
@@ -62,9 +78,24 @@ import getNearestStartTime from '~/util/getNearestStartTime';
 import wait from '~/util/wait';
 import { fetchData } from '~/services/api';
 
+const DEFAULT_EVENT = {
+  title: "Boston's still running",
+  description: `Our streets may be empty, but we're still running at full force.
+The Boston Globe is partnering with local restaurants to serve those working on the front line in the fight against COVID-19.
+For each $10 contributed, we are enabling local restaurants to provide fresh-made meals to one of the many Boston-area hospitals.`,
+  link: 'https://www.youtube.com/watch?time_continue=2&v=eyBP2SlwW8U',
+  donationLink: 'https://manage.bostonglobe.com/order/da2/contribute.html',
+};
+
 export default {
   name: 'Homepage',
-  components: { EventDescription, FloatingButton, LoadingScreen, TimeTable },
+  components: {
+    EventDescription,
+    EventPreview,
+    FloatingButton,
+    LoadingScreen,
+    TimeTable,
+  },
   data() {
     return {
       autoScroll: false,
@@ -74,7 +105,7 @@ export default {
       isLoading: true,
       hasTouchedAutoScroll: false,
       hasTouchedTimeTable: false,
-      selectedEvent: null,
+      selectedEvent: DEFAULT_EVENT,
     };
   },
   computed: {
@@ -108,13 +139,8 @@ export default {
       handler(newVal) {
         if (newVal === 'sm') {
           this.autoScroll = false;
-        } else {
-          if (!this.hasTouchedAutoScroll) {
-            this.autoScroll = true;
-          }
-          if (!this.selectedEvent) {
-            this.pickRandomEvent();
-          }
+        } else if (!this.hasTouchedAutoScroll) {
+          this.autoScroll = true;
         }
       },
     },
@@ -132,7 +158,6 @@ export default {
     this.isLoading = false;
     this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
     if (this.$mq !== 'sm') {
-      this.pickRandomEvent();
       this.autoScroll = true;
     }
   },
@@ -141,6 +166,14 @@ export default {
     clearInterval(this.randomizerInterval);
   },
   methods: {
+    handleDonateClick() {
+      if (this.$mq === 'sm') {
+        window.open(DEFAULT_EVENT.donationLink);
+      } else {
+        this.handleEventClick(DEFAULT_EVENT);
+        this.autoScroll = true;
+      }
+    },
     handleEventClick(event) {
       this.selectedEvent = event;
       this.hasTouchedTimeTable = true;

@@ -6,7 +6,7 @@
       <div class="font-bold leading-none mb-2 text-3xl md:text-5xl font-bold">
         {{ event.title }}
       </div>
-      <div>
+      <div v-if="event.startTime">
         {{ formatDate(event.startTime) }} - {{ formatDate(event.endTime) }}
       </div>
       <EventLinks class="mt-4" :event="event" size="lg" />
