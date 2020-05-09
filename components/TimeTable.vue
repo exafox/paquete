@@ -8,7 +8,7 @@
     :style="tableStyles"
   >
     <!-- Timeslot Labels -->
-    <div class="time-slot left-0 z-40">
+    <div ref="timeSlot" class="time-slot left-0 z-40">
       {{ formatDate(currentTime) }}
     </div>
     <div v-for="date in timeslots" :key="date.toISOString()" class="time-slot">
@@ -146,12 +146,11 @@ export default {
     this.interval = setInterval(() => {
       if (!this.$refs.container) return;
       const currentScrollTop = this.$refs.container.scrollTop;
-      const scrollHeight = this.$refs.container.scrollHeight;
       const clonesHeight = this.getCloneHeight();
       let newScrollTop = 1;
       if (currentScrollTop <= 0) {
         newScrollTop = clonesHeight;
-      } else if (currentScrollTop + clonesHeight < scrollHeight) {
+      } else if (currentScrollTop < clonesHeight) {
         newScrollTop = currentScrollTop + (this.autoScroll ? 1 : 0);
       }
       this.$refs.container.scrollTop = newScrollTop;
@@ -163,12 +162,14 @@ export default {
   methods: {
     formatDate,
     getCloneHeight() {
-      return Object.entries(this.$refs).reduce((acc, [key, el]) => {
-        if (key.includes('-clone') && el) {
-          acc += el[0].offsetHeight;
-        }
-        return acc;
-      }, 0);
+      return (
+        Object.entries(this.$refs).reduce((acc, [key, el]) => {
+          if (key.includes('-clone') && el) {
+            acc += el[0].offsetHeight;
+          }
+          return acc;
+        }, 0) + this.$refs.timeSlot.offsetHeight
+      );
     },
   },
 };
