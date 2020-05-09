@@ -144,6 +144,7 @@ export default {
     handleEventClick(event) {
       this.selectedEvent = event;
       this.hasTouchedTimeTable = true;
+      this.autoScroll = false;
     },
     pickRandomEvent() {
       if (!this.upcomingEvents.length || this.$mq === 'sm') return;
