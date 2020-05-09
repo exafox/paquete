@@ -18,6 +18,31 @@
       class="w-full"
       @eventClick="handleEventClick"
     />
+    <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-50">
+      <FloatingButton
+        :title="autoScroll ? 'Start auto-scrolling' : 'Stop auto-scrolling'"
+        tag="button"
+        type="button"
+        class="mr-2"
+        @click="autoScroll = !autoScroll"
+      >
+        <span class="sr-only">{{
+          autoScroll ? 'Start auto-scrolling' : 'Stop auto-scrolling'
+        }}</span>
+        <div v-if="!autoScroll" class="play" />
+        <div v-if="autoScroll" class="pause" />
+      </FloatingButton>
+      <FloatingButton
+        title="Submit a stream"
+        tag="a"
+        href="https://forms.gle/AJTqLsaVjimqLPsv6"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="sr-only">Submit a stream</span>
+        <span class="relative -mt-1 text-4xl">+</span>
+      </FloatingButton>
+    </div>
     <transition name="slow-fade">
       <LoadingScreen v-if="isLoading" />
     </transition>
@@ -30,6 +55,7 @@ import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
 import uniq from 'lodash/uniq';
 import EventDescription from '~/components/EventDescription';
+import FloatingButton from '~/components/FloatingButton';
 import LoadingScreen from '~/components/LoadingScreen';
 import TimeTable from '~/components/TimeTable';
 import getNearestStartTime from '~/util/getNearestStartTime';
@@ -38,7 +64,7 @@ import { fetchData } from '~/services/api';
 
 export default {
   name: 'Homepage',
-  components: { EventDescription, LoadingScreen, TimeTable },
+  components: { EventDescription, FloatingButton, LoadingScreen, TimeTable },
   data() {
     return {
       autoScroll: false,
@@ -159,6 +185,29 @@ export default {
   .description,
   .time-table {
     height: 50vh;
+  }
+}
+
+.play {
+  @apply relative -mr-1;
+  border-color: transparent transparent transparent #fff;
+  border-style: solid;
+  border-width: 0.5em 0 0.5em 0.7em;
+}
+
+.pause {
+  @apply flex;
+
+  &::before,
+  &::after {
+    @apply bg-white block;
+    content: '';
+    height: 1em;
+    width: 0.25em;
+  }
+
+  &::before {
+    @apply mr-1;
   }
 }
 </style>
