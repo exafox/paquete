@@ -19,8 +19,8 @@ export default {
   },
   computed: {
     embedLink() {
-      if (event.embedLink) {
-        return event.embedLink;
+      if (this.event.embedLink) {
+        return this.event.embedLink;
       }
       const url = new URL(this.event.link);
       switch (url.hostname) {
