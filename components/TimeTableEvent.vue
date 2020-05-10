@@ -1,10 +1,10 @@
 <template>
   <button
     :style="styles"
-    class="p-2 relative text-xs text-left z-10"
+    class="time-table-event px-4 py-2 relative text-xs text-left z-10"
     :class="{
       'bg-blue text-white': !isSelected,
-      'bg-white text-blue': isSelected,
+      'bg-white text-blue selected': isSelected,
     }"
     type="button"
     v-bind="accessibilityProps"
@@ -100,6 +100,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.time-table-event.selected::before {
+  @apply absolute block bg-blue inset-y-0 left-0 pl-2;
+  content: '';
+}
+
 .description {
   max-width: 60vw;
 

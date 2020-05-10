@@ -4,9 +4,7 @@
       <div class="video bg-black w-1/2 relative">
         <EventPreview v-if="selectedEvent" :event="selectedEvent" />
       </div>
-      <div class="description flex flex-col overflow-auto p-12 w-1/2">
-        <EventDescription :event="selectedEvent" />
-      </div>
+      <EventDescription :event="selectedEvent" class="description w-1/2" />
     </template>
     <TimeTable
       :auto-scroll="autoScroll"

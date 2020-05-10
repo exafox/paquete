@@ -1,18 +1,24 @@
 <template>
   <div
-    class="event-description flex flex-col flex-grow items-start justify-center"
+    class="event-description flex flex-col overflow-x-hidden overflow-y-auto"
   >
     <template v-if="event">
-      <div class="font-bold leading-none mb-2 text-3xl md:text-5xl font-bold">
-        {{ event.title }}
+      <div class="flex flex-col flex-grow items-start justify-center  p-12">
+        <div class="font-bold leading-none mb-2 text-3xl md:text-5xl font-bold">
+          {{ event.title }}
+        </div>
+        <div v-if="event.startTime">
+          {{ formatDate(event.startTime) }} - {{ formatDate(event.endTime) }}
+        </div>
+        <div v-if="event.description" class="mt-4 text-lg">
+          {{ event.description }}
+        </div>
       </div>
-      <div v-if="event.startTime">
-        {{ formatDate(event.startTime) }} - {{ formatDate(event.endTime) }}
-      </div>
-      <EventLinks class="mt-4" :event="event" size="lg" />
-      <div v-if="event.description" class="mt-4 text-lg">
-        {{ event.description }}
-      </div>
+      <EventLinks
+        class="bg-white sticky bottom-0 mt-4 px-12 pb-12"
+        :event="event"
+        size="lg"
+      />
     </template>
   </div>
 </template>
@@ -37,4 +43,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.event-links::before {
+  @apply absolute block h-0 inset-x-0 pb-8;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  content: '';
+  top: -2em;
+}
+</style>
