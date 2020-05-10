@@ -33,7 +33,14 @@ const mapEntry = (entry) => {
   const description = get(entry, 'gsx$descriptionoptional.$t', '');
   const descriptionLink = get(entry, 'gsx$descriptionpagelinkoptional.$t', '');
   const donationLink = get(entry, 'gsx$donationpagelinkoptional.$t', '');
+  const embedLink = get(entry, 'gsx$embedlink.$t', '');
   const handle = get(entry, 'gsx$handle.$t', '');
+  const isFeatured = get(entry, 'gsx$featured.$t') === '1';
+  const isAudio = get(entry, 'gsx$audio.$t') === '1';
+  const isAdult = get(entry, 'gsx$adult.$t') === '1';
+  const isPaywall = get(entry, 'gsx$paywall.$t') === '1';
+  const isCharity = get(entry, 'gsx$charity.$t') === '1';
+  const isSponsored = get(entry, 'gsx$sponsored.$t') === '1';
   const startTime = toDate(new Date(startTimeStr + ' EDT'), {
     timeZone: 'America/New_York',
   });
@@ -53,9 +60,16 @@ const mapEntry = (entry) => {
     description,
     descriptionLink,
     donationLink,
+    embedLink,
     handle,
     startTime,
     endTime,
+    isFeatured,
+    isAudio,
+    isAdult,
+    isPaywall,
+    isCharity,
+    isSponsored,
   };
 };
 
