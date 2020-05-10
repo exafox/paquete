@@ -3,8 +3,7 @@ import axios from 'axios';
 import get from 'lodash/get';
 import { toDate } from 'date-fns-tz';
 
-const url =
-  'https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json';
+const url = process.env.SHEETS_URL;
 
 // const baseURL = process.env.API_URL || '';
 const headers = {
@@ -30,11 +29,11 @@ const mapEntry = (entry) => {
 
   const id = get(entry, 'id.$t', title);
   const link = get(entry, 'gsx$streamlink.$t', '');
-  const category = get(entry, 'gsx$category.$t', '');
-  const channel = get(entry, 'gsx$channelorhandle.$t', '');
+  const channel = get(entry, 'gsx$channel.$t', '');
   const description = get(entry, 'gsx$descriptionoptional.$t', '');
   const descriptionLink = get(entry, 'gsx$descriptionpagelinkoptional.$t', '');
   const donationLink = get(entry, 'gsx$donationpagelinkoptional.$t', '');
+  const handle = get(entry, 'gsx$handle.$t', '');
   const startTime = toDate(new Date(startTimeStr + ' EDT'), {
     timeZone: 'America/New_York',
   });
@@ -50,11 +49,11 @@ const mapEntry = (entry) => {
     title,
     id,
     link,
-    category,
     channel,
     description,
     descriptionLink,
     donationLink,
+    handle,
     startTime,
     endTime,
   };

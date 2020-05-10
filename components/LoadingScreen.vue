@@ -1,6 +1,6 @@
 <template>
   <div
-    class="loading-screen flex items-center justify-center fixed inset-0 z-50"
+    class="font-sans loading-screen flex items-center justify-center fixed inset-0 z-50"
   >
     <div class="noise-wrapper"><div class="noise" /></div>
     <div class="loading" data-text="LOADING">LOADING</div>
@@ -9,17 +9,20 @@
 
 <style lang="scss" scoped>
 // Stealing this from https://css-tricks.com/glitch-effect-text-images-svg/
-$background: blue;
-
 .loading-screen {
-  background: $background;
+  @apply bg-blue;
 }
 
 .loading {
+  @apply text-6xl;
   color: white;
-  font-size: 100px;
   position: relative;
+
+  @media screen and (min-width: 768px) {
+    font-size: 100px;
+  }
 }
+
 @keyframes noise-anim {
   $steps: 20;
   @for $i from 0 through $steps {
@@ -31,13 +34,13 @@ $background: blue;
   }
 }
 .loading::after {
+  @apply bg-blue;
   content: attr(data-text);
   position: absolute;
   left: 2px;
   text-shadow: -1px 0 red;
   top: 0;
   color: white;
-  background: $background;
   overflow: hidden;
   animation: noise-anim 2s infinite linear alternate-reverse;
 }
@@ -53,13 +56,13 @@ $background: blue;
   }
 }
 .loading::before {
+  @apply bg-blue;
   content: attr(data-text);
   position: absolute;
   left: -2px;
   text-shadow: 1px 0 yellow;
   top: 0;
   color: white;
-  background: $background;
   overflow: hidden;
   animation: noise-anim-2 15s infinite linear alternate-reverse;
 }

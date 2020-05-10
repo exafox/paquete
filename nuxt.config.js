@@ -16,21 +16,9 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-  /*
-   ** Customize the progress-bar color
-   */
   loading: { color: '#fff' },
-  /*
-   ** Global CSS
-   */
-  css: [],
-  /*
-   ** Plugins to load before mounting the App
-   */
+  css: ['~/assets/css/fonts.css'],
   plugins: [],
-  /*
-   ** Nuxt.js dev-modules
-   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
@@ -48,8 +36,10 @@ export default {
     // '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    ['nuxt-mq', { breakpoints: { sm: 768, tablet: 1024, desktop: Infinity } }],
   ],
   build: {
+    transpile: ['vue-clamp', 'resize-detector'],
     extend: (config) => {
       const svgRule = config.module.rules.find((rule) =>
         rule.test.test('.svg')
@@ -68,5 +58,8 @@ export default {
   },
   gtm: {
     id: process.env.GTM_ID,
+  },
+  env: {
+    SHEETS_URL: process.env.SHEETS_URL || '',
   },
 };
