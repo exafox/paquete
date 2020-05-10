@@ -3,7 +3,7 @@
     :is="tag"
     class="cursor-pointer floating-button appearance-none h-12 inline-flex items-center justify-center rounded-full w-12 transition duration-200 ease-in-out shadow-md"
     :class="{
-      'bg-red-700 hover:bg-red-600 text-white': variant === 'primary',
+      'bg-red hover:opacity-75 text-white': variant === 'primary',
       'bg-gray hover:bg-blue text-blue hover:text-white':
         variant === 'secondary',
       'opacity-50': disabled,
