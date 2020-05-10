@@ -55,7 +55,7 @@
         @click="handleDonateClick"
       >
         <span class="sr-only">Donate</span>
-        <span class="relative text-2xl">$</span>
+        <span class="relative text-2xl"><DonateIcon /></span>
       </FloatingButton>
     </div>
     <transition name="slow-fade">
@@ -69,6 +69,7 @@ import addHours from 'date-fns/addHours';
 import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
 import uniq from 'lodash/uniq';
+import DonateIcon from '~/assets/icons/donate.svg';
 import EventDescription from '~/components/EventDescription';
 import EventPreview from '~/components/EventPreview';
 import FloatingButton from '~/components/FloatingButton';
@@ -90,6 +91,7 @@ For each $10 contributed, we are enabling local restaurants to provide fresh-mad
 export default {
   name: 'Homepage',
   components: {
+    DonateIcon,
     EventDescription,
     EventPreview,
     FloatingButton,
