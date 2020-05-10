@@ -46,7 +46,7 @@
         rel="noopener noreferrer"
       >
         <span class="sr-only">Submit a stream</span>
-        <span class="relative -mt-1 text-4xl">+</span>
+        <span class="relative font-medium text-4xl">+</span>
       </FloatingButton>
       <FloatingButton
         title="Donate"

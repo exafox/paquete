@@ -4,7 +4,7 @@
     class="p-2 relative text-xs text-left z-10"
     :class="{
       'bg-blue text-white': !isSelected,
-      'bg-white': isSelected,
+      'bg-white text-blue': isSelected,
     }"
     type="button"
     v-bind="accessibilityProps"
@@ -12,11 +12,12 @@
   >
     <div class="font-bold text-sm">{{ event.title }}</div>
     <div>{{ startTime }} - {{ endTime }}</div>
-    <template v-if="event.description">
-      <VClamp :max-lines="showInlineDescription && isSelected ? 0 : 2">{{
-        event.description
-      }}</VClamp>
-    </template>
+    <VClamp
+      v-if="event.description"
+      class="description"
+      :max-lines="showInlineDescription && isSelected ? 0 : 2"
+      >{{ event.description }}</VClamp
+    >
     <EventLinks
       v-if="showInlineDescription && isSelected"
       class="mt-4"
@@ -97,3 +98,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.description {
+  max-width: 60vw;
+
+  @media screen and (min-width: 768px) {
+    max-width: 80ch;
+  }
+}
+</style>
