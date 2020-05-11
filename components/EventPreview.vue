@@ -6,7 +6,8 @@
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
     :src="embedLink"
-  ></iframe>
+  />
+  <div v-else class="offline" />
 </template>
 
 <script>
@@ -40,4 +41,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.offline {
+  @apply absolute inset-0 w-full h-full;
+  background: url('/offline.png') center center no-repeat;
+  background-size: cover;
+}
+</style>

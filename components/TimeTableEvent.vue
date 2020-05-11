@@ -1,28 +1,32 @@
 <template>
   <button
     :style="styles"
-    class="time-table-event px-4 py-2 relative text-xs text-left z-10"
+    class="time-table-event flex px-4 py-2 relative text-xs text-left z-10"
     :class="{
-      'bg-blue text-white': !isSelected,
+      'bg-blue text-white': !isSelected && !event.isFeatured,
+      'bg-red text-white': !isSelected && event.isFeatured,
       'bg-white text-blue selected': isSelected,
     }"
     type="button"
     v-bind="accessibilityProps"
     @click="handleClick"
   >
-    <div class="font-bold text-sm">{{ event.title }}</div>
-    <div>{{ startTime }} - {{ endTime }}</div>
-    <VClamp
-      v-if="event.description"
-      class="description"
-      :max-lines="showInlineDescription && isSelected ? 0 : 2"
-      >{{ event.description }}</VClamp
-    >
-    <EventLinks
-      v-if="showInlineDescription && isSelected"
-      class="mt-4"
-      :event="event"
-    />
+    <div class="flex-grow">
+      <div class="font-bold text-sm">{{ event.title }}</div>
+      <div>{{ startTime }} - {{ endTime }}</div>
+      <VClamp
+        v-if="event.description"
+        class="description"
+        :max-lines="showInlineDescription && isSelected ? 0 : 2"
+        >{{ event.description }}</VClamp
+      >
+      <EventLinks
+        v-if="showInlineDescription && isSelected"
+        class="mt-4"
+        :event="event"
+      />
+    </div>
+    <FeaturedIcon v-if="event.isFeatured" class="flex-shrink-0 ml-1" />
   </button>
 </template>
 
@@ -31,13 +35,14 @@ import VClamp from 'vue-clamp';
 import kebabCase from 'lodash/kebabCase';
 import { format } from 'date-fns-tz';
 import EventLinks from '~/components/EventLinks';
+import FeaturedIcon from '~/assets/icons/globeB.svg';
 import TrackingEvents from '~/constants/TrackingEvents';
 import formatDate from '~/util/formatDate';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import getNearestEndTime from '~/util/getNearestEndTime';
 
 export default {
-  components: { EventLinks, VClamp },
+  components: { EventLinks, FeaturedIcon, VClamp },
   props: {
     event: {
       type: Object,

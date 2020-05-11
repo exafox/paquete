@@ -4,11 +4,14 @@
   >
     <template v-if="event">
       <div class="flex flex-col flex-grow items-start justify-center  p-12">
-        <div class="font-bold leading-none mb-2 text-3xl md:text-5xl font-bold">
+        <div class="font-bold leading-none mb-4 text-3xl md:text-5xl font-bold">
           {{ event.title }}
         </div>
-        <div v-if="event.startTime">
-          {{ formatDate(event.startTime) }} - {{ formatDate(event.endTime) }}
+        <div class="flex">
+          <div v-if="event.startTime" class="font-medium items-center mr-8">
+            {{ formatDate(event.startTime) }} - {{ formatDate(event.endTime) }}
+          </div>
+          <EventBadges :event="event" />
         </div>
         <div v-if="event.description" class="mt-4 text-lg">
           {{ event.description }}
@@ -25,10 +28,11 @@
 
 <script>
 import { format } from 'date-fns-tz';
+import EventBadges from '~/components/EventBadges';
 import EventLinks from '~/components/EventLinks';
 
 export default {
-  components: { EventLinks },
+  components: { EventBadges, EventLinks },
   props: {
     event: {
       type: Object,
