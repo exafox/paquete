@@ -7,13 +7,17 @@
     allowfullscreen
     :src="embedLink"
   />
-  <div v-else class="offline" />
+  <div v-else class="offline relative">
+    <StaticNoise />
+  </div>
 </template>
 
 <script>
 import isNumber from 'lodash/isNumber';
+import StaticNoise from '~/components/StaticNoise';
 
 export default {
+  components: { StaticNoise },
   props: {
     event: {
       type: Object,
