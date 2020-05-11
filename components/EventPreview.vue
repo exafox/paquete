@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import isNumber from 'lodash/isNumber';
+
 export default {
   props: {
     event: {
@@ -33,6 +35,10 @@ export default {
         case 'www.livestream.com':
         case 'livestream.com':
           return `${this.event.link}/player?enableInfoAndActivity=true&autoPlay=true&mute=true`;
+        case 'app.stitcher.com':
+          return `https://app.stitcher.com/splayer/f/${url.pathname
+            .split('/')
+            .find((seg) => isNumber(parseInt(seg, 10)))}`;
         default:
           return null;
       }
