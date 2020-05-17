@@ -1,6 +1,6 @@
 # paquete
 
-> Globe video pages
+> Globe video pages!
 
 ## Build Setup
 
