@@ -6,11 +6,18 @@
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
     :src="embedLink"
-  ></iframe>
+  />
+  <div v-else class="offline relative">
+    <StaticNoise />
+  </div>
 </template>
 
 <script>
+import isNumber from 'lodash/isNumber';
+import StaticNoise from '~/components/StaticNoise';
+
 export default {
+  components: { StaticNoise },
   props: {
     event: {
       type: Object,
@@ -32,6 +39,10 @@ export default {
         case 'www.livestream.com':
         case 'livestream.com':
           return `${this.event.link}/player?enableInfoAndActivity=true&autoPlay=true&mute=true`;
+        case 'app.stitcher.com':
+          return `https://app.stitcher.com/splayer/f/${url.pathname
+            .split('/')
+            .find((seg) => isNumber(parseInt(seg, 10)))}`;
         default:
           return null;
       }
@@ -40,4 +51,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.offline {
+  @apply absolute inset-0 w-full h-full;
+  background: url('/offline.png') center center no-repeat;
+  background-size: cover;
+}
+</style>

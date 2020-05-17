@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap -mx-2">
+  <div class="event-links flex flex-wrap -mx-2">
     <BaseButton
       v-if="event.link"
       tag="a"
