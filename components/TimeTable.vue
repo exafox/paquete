@@ -191,7 +191,7 @@ $grid-gap: 5px;
 }
 
 .time-slot {
-  @apply flex items-center bg-blue font-bold justify-center px-6 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
+  @apply flex items-center bg-blue font-bold justify-center px-12 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
   grid-row: times;
 
   &::after {
