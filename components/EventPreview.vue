@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import isNumber from 'lodash/isNumber';
+import isFinite from 'lodash/isFinite';
 import StaticNoise from '~/components/StaticNoise';
 
 export default {
@@ -42,7 +42,7 @@ export default {
         case 'app.stitcher.com':
           return `https://app.stitcher.com/splayer/f/${url.pathname
             .split('/')
-            .find((seg) => isNumber(parseInt(seg, 10)))}`;
+            .find((seg) => isFinite(parseInt(seg, 10)))}`;
         default:
           return null;
       }
