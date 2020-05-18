@@ -37,6 +37,7 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     ['nuxt-mq', { breakpoints: { sm: 768, tablet: 1024, desktop: Infinity } }],
+    'portal-vue/nuxt',
   ],
   build: {
     transpile: ['vue-clamp', 'resize-detector'],
