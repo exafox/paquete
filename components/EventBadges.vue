@@ -1,38 +1,52 @@
 <template>
   <div class="event-badges flex -mx-1">
-    <div v-if="event.isAdult" class="badge" title="May contain adult content">
+    <BadgeButton
+      v-if="event.isAdult"
+      tag="div"
+      class="mx-1"
+      title="May contain adult content"
+    >
       <AdultIcon />
-    </div>
-    <div v-if="event.isAudio" class="badge" title="Audio content">
+    </BadgeButton>
+    <BadgeButton
+      v-if="event.isAudio"
+      tag="div"
+      class="mx-1"
+      title="Audio content"
+    >
       <AudioIcon />
-    </div>
-    <div
+    </BadgeButton>
+    <BadgeButton
       v-if="event.isCharity"
-      class="badge"
+      tag="div"
+      class="mx-1"
       title="This event is for charity. Please consider giving."
     >
       <DonateIcon />
-    </div>
-    <div
+    </BadgeButton>
+    <BadgeButton
       v-if="event.isPaywall"
-      class="badge"
+      tag="div"
+      class="mx-1"
       title="May require paid ticket or subscription"
     >
       <PaywallIcon />
-    </div>
-    <div
+    </BadgeButton>
+    <BadgeButton
       v-if="event.isSponsored"
-      class="badge"
+      tag="div"
+      class="mx-1"
       title="This listing is sponsored"
     >
       <SponsoredIcon />
-    </div>
+    </BadgeButton>
   </div>
 </template>
 
 <script>
 import AdultIcon from '~/assets/icons/adult.svg';
 import AudioIcon from '~/assets/icons/audio.svg';
+import BadgeButton from '~/components/BadgeButton';
 import DonateIcon from '~/assets/icons/donate_sm.svg';
 import PaywallIcon from '~/assets/icons/paywall.svg';
 import SponsoredIcon from '~/assets/icons/sponsored.svg';
@@ -41,6 +55,7 @@ export default {
   components: {
     AdultIcon,
     AudioIcon,
+    BadgeButton,
     DonateIcon,
     PaywallIcon,
     SponsoredIcon,
@@ -53,13 +68,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.badge {
-  @apply bg-dark-gray flex h-6 items-center justify-center mx-1 rounded-full text-white w-6;
-  svg {
-    position: relative;
-    top: -1px;
-  }
-}
-</style>

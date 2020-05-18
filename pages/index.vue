@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-wrap flex-row-reverse">
+    <BrandHeader />
     <template v-if="$mq !== 'sm'">
       <div class="video bg-black w-1/2 relative">
         <EventPreview v-if="selectedEvent" :event="selectedEvent" />
@@ -18,7 +19,7 @@
       class="w-full"
       @eventClick="handleEventClick"
     />
-    <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-50">
+    <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-30">
       <FloatingButton
         :title="autoScroll ? 'Start auto-scrolling' : 'Stop auto-scrolling'"
         tag="button"
@@ -67,6 +68,7 @@ import addHours from 'date-fns/addHours';
 import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
 import uniq from 'lodash/uniq';
+import BrandHeader from '~/components/BrandHeader';
 import DonateIcon from '~/assets/icons/donate.svg';
 import EventDescription from '~/components/EventDescription';
 import EventPreview from '~/components/EventPreview';
@@ -89,6 +91,7 @@ For each $10 contributed, we are enabling local restaurants to provide fresh-mad
 export default {
   name: 'Homepage',
   components: {
+    BrandHeader,
     DonateIcon,
     EventDescription,
     EventPreview,
@@ -211,14 +214,17 @@ export default {
 
 <style lang="scss" scoped>
 .time-table {
-  height: 100vh;
+  height: calc(100vh - 4rem);
 }
 
 @media screen and (min-width: 768px) {
-  .video,
-  .description,
   .time-table {
     height: 50vh;
+  }
+
+  .video,
+  .description {
+    height: calc(50vh - 4rem);
   }
 }
 
