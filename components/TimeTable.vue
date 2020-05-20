@@ -191,7 +191,7 @@ $grid-gap: 5px;
 }
 
 .time-slot {
-  @apply flex items-center bg-blue font-bold justify-center px-12 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-20;
+  @apply flex items-center bg-blue font-bold justify-center px-12 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
   grid-row: times;
 
   &::after {
@@ -216,7 +216,7 @@ $grid-gap: 5px;
 }
 
 .channel {
-  @apply bg-navy flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow uppercase z-10;
+  @apply bg-navy flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow uppercase z-20;
   grid-column: channels;
 
   // Horizontal grid lines
