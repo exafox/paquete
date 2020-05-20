@@ -30,7 +30,7 @@ Paquete is a web app built in [Nuxt](https://nuxtjs.org/) and [Vue](https://vuej
 
 ### The Back End
 
-Data is pulled from a JSON feed created and managed by a [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/edit#gid=941579403). This spreadsheet has two tabs of note, "New Schedule" and "Demo Schedule". New Schedule is considered "production" data, and the Demo Schedule is "test" data.
+Data is pulled from a JSON feed created and managed by a Google Spreadsheet. This spreadsheet has two tabs of note, "New Schedule" and "Demo Schedule". New Schedule is considered "production" data, and the Demo Schedule is "test" data.
 
 When creating changes to the data schema (e.g. adding new columns to the spreadsheets), changes should be first made on the demo schedule and then migrated to the new schedule. Caution should be taken when changing column headers in the spreadsheet as that will affect [mapping of data on the front-end](https://github.com/exafox/paquete/blob/master/services/api.js).
 
