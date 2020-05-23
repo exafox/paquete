@@ -1,11 +1,14 @@
 <template>
   <iframe
     v-if="embedLink"
+    :key="embedLink"
+    ref="iframe"
     class="absolute inset-0 w-full h-full"
     frameborder="0"
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
     :src="embedLink"
+    @click="emit('click')"
   />
   <div v-else class="offline relative">
     <StaticNoise />
@@ -47,6 +50,19 @@ export default {
           return null;
       }
     },
+  },
+  mounted() {
+    if (!this.embedLink) return;
+    this.monitor = setInterval(() => {
+      const activeEl = document.activeElement;
+      if (activeEl === this.$refs.iframe) {
+        this.$emit('iframe-clicked');
+        clearInterval(this.monitor);
+      }
+    }, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.monitor);
   },
 };
 </script>
