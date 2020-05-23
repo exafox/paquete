@@ -133,10 +133,14 @@ export default {
           '[times] auto',
           '[grid-lines] 0',
           ...this.channels.map(
-            (channel) => `[channel-${kebabCase(channel)}] auto`
+            (channel) =>
+              `[channel-${kebabCase(channel)}] minmax(${100 /
+                this.channels.length}%, auto)`
           ),
           ...this.channels.map(
-            (channel) => `[channel-${kebabCase(channel)}-clone] auto`
+            (channel) =>
+              `[channel-${kebabCase(channel)}-clone] minmax(${100 /
+                this.channels.length}%, auto)`
           ),
         ].join(' '),
       };
