@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap flex-row-reverse">
-    <BrandHeader />
+    <BrandHeader v-if="isShowingHeader" />
     <template v-if="$mq !== 'sm'">
       <div class="video bg-black w-1/2 relative">
         <EventPreview v-if="selectedEvent" :event="selectedEvent" />
@@ -116,6 +116,9 @@ export default {
       return uniq(this.events.map((item) => item.channel))
         .filter((item) => item)
         .sort();
+    },
+    isShowingHeader() {
+      return process.env.SHOW_HEADER;
     },
     startTime() {
       return getNearestStartTime(this.currentTime);
