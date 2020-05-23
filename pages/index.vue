@@ -3,7 +3,11 @@
     <BrandHeader v-if="isShowingHeader" />
     <template v-if="$mq !== 'sm'">
       <div class="video bg-black w-1/2 relative">
-        <EventPreview v-if="selectedEvent" :event="selectedEvent" />
+        <EventPreview
+          v-if="selectedEvent"
+          :event="selectedEvent"
+          @iframe-clicked="handleIframeClicked"
+        />
       </div>
       <EventDescription :event="selectedEvent" class="description w-1/2" />
     </template>
@@ -184,6 +188,9 @@ export default {
       this.selectedEvent = event;
       this.hasTouchedTimeTable = true;
       this.autoScroll = false;
+    },
+    handleIframeClicked() {
+      this.hasTouchedTimeTable = true;
     },
     pickRandomEvent() {
       if (!this.upcomingEvents.length || this.$mq === 'sm') return;
