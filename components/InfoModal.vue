@@ -2,22 +2,19 @@
   <ModalWindow @close="$emit('close')">
     <BostonGlobeLogo class="logo mb-8 mx-auto" />
     <h1 class="font-bold mb-4 text-xl">About This Project</h1>
-    <p class="mb-4">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent luctus
-      odio ex, non luctus quam placerat et. Nam leo purus, sodales faucibus nisi
-      id, facilisis pharetra dolor. Nulla blandit lacinia dolor, eget imperdiet
-      urna ullamcorper vitae. Donec eu nibh laoreet, sodales nulla ac, viverra
-      leo. Duis rutrum justo at lacus mollis, quis tempor lectus cursus. Mauris
-      ac lacus nunc. Maecenas fermentum velit at nisl euismod, sit amet vehicula
-      lacus faucibus.
-    </p>
-    <p class="mb-4">
-      Phasellus sagittis urna at pulvinar convallis. Aenean sit amet nulla
-      sapien. Curabitur sem ipsum, tempus nec arcu eu, lobortis malesuada est.
-      Praesent ultrices dapibus nisl, vitae volutpat ligula convallis vel. Morbi
-      iaculis, eros eu sodales semper, lorem metus tristique neque, maximus
-      sagittis magna risus a risus. Maecenas id diam eu ante lacinia vehicula a
-      ut elit. Aliquam semper iaculis semper. Aenean in tristique urna.
+    <p>
+      The Boston Globe is proud to present LiveGuide, your daily schedule of the
+      latest livestreams and other content from around the internet. Stay tuned
+      for entertainment, news, virtual events, and the Globe's critics' picks.
+      Do you have a livestream you’d like us to consider including in LiveGuide?
+      Provide us with the details
+      <a
+        href="https://forms.gle/AJTqLsaVjimqLPsv6"
+        class="text-blue underline"
+        target="_blank"
+        rel="noopener noreferrer"
+        >here</a
+      >.
     </p>
   </ModalWindow>
 </template>
