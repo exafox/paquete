@@ -26,8 +26,8 @@ export default {
     '@nuxtjs/stylelint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/google-analytics',
-    '@nuxtjs/gtm',
+    ['@nuxtjs/google-analytics', { id: process.env.GA_ID || 'UA-165398200-1' }],
+    ['@nuxtjs/gtm', { id: process.env.GTM_ID || 'GTM-NG5QB9L' }],
   ],
   /*
    ** Nuxt.js modules
@@ -54,13 +54,8 @@ export default {
       });
     },
   },
-  googleAnalytics: {
-    id: 'UA-12301-2',
-  },
-  gtm: {
-    id: process.env.GTM_ID,
-  },
   env: {
     SHEETS_URL: process.env.SHEETS_URL || '',
+    SHOW_HEADER: process.env.SHOW_HEADER === 'true',
   },
 };

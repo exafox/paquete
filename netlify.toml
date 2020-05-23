@@ -1,7 +1,11 @@
 [build.environment]
   GA_ID = "UA-165398200-1"
   GTM_ID = "GTM-NG5QB9L"
-  SHEETS_URL ="https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/2/public/full?alt=json"
+  SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/2/public/full?alt=json"
+  SHOW_HEADER = "true"
+
+[context.globe.environment]
+  SHOW_HEADER = "false"
 
 [context.production.environment]
   SHEETS_URL ="https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
