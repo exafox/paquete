@@ -12,8 +12,14 @@
     @click="handleClick"
   >
     <div class="flex-grow">
-      <div class="font-bold text-sm">{{ event.title }}</div>
-      <div>{{ startTime }} - {{ endTime }}</div>
+      <VClamp
+        class="font-bold text-sm"
+        :max-lines="showInlineDescription && isSelected ? 0 : 1"
+        >{{ event.title }}</VClamp
+      >
+      <VClamp :max-lines="showInlineDescription && isSelected ? 0 : 1"
+        >{{ startTime }} - {{ endTime }}</VClamp
+      >
       <VClamp
         v-if="event.description"
         class="description"
