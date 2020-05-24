@@ -5,6 +5,9 @@
   SHOW_HEADER = "true"
 
 [context.globe.environment]
+  GA_ID = "UA-165398200-2"
+  GTM_ID = "GTM-MFGXDQZ"
+  SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
   SHOW_HEADER = "false"
 
 [context.production.environment]
