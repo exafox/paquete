@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-wrap flex-row-reverse">
+  <div
+    class="flex flex-wrap flex-row-reverse"
+    :class="{ 'has-header': isShowingHeader }"
+  >
     <BrandHeader v-if="isShowingHeader" />
     <template v-if="$mq !== 'sm'">
       <div class="video bg-black w-1/2 relative">
@@ -224,7 +227,11 @@ export default {
 
 <style lang="scss" scoped>
 .time-table {
-  height: calc(100vh - 4rem);
+  height: 100vh;
+
+  &.has-header {
+    height: calc(100vh - 4rem);
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -234,7 +241,11 @@ export default {
 
   .video,
   .description {
-    height: calc(50vh - 4rem);
+    height: 50vh;
+
+    .has-header & {
+      height: calc(50vh - 4rem);
+    }
   }
 }
 
