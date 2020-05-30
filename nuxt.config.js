@@ -56,6 +56,6 @@ export default {
   },
   env: {
     SHEETS_URL: process.env.SHEETS_URL || '',
-    SHOW_HEADER: process.env.SHOW_HEADER === 'true',
+    VARIANT: process.env.VARIANT || '',
   },
 };
