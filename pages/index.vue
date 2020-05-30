@@ -1,19 +1,21 @@
 <template>
-  <div
-    class="flex flex-wrap flex-row-reverse"
-    :class="{ 'has-header': isShowingHeader }"
-  >
-    <BrandHeader v-if="isShowingHeader" />
-    <template v-if="$mq !== 'sm'">
-      <div class="video bg-black w-1/2 relative">
-        <EventPreview
-          v-if="selectedEvent"
-          :event="selectedEvent"
-          @iframe-clicked="handleIframeClicked"
-        />
+  <div class="flex flex-col h-screen">
+    <div class="header flex flex-col flex-shrink-0">
+      <BrandHeader class="flex-shrink-0" />
+      <div
+        v-if="$mq !== 'sm'"
+        class="flex flex-row-reverse flex-grow overflow-hidden"
+      >
+        <div class="video bg-black w-1/2 relative">
+          <EventPreview
+            v-if="selectedEvent"
+            :event="selectedEvent"
+            @iframe-clicked="handleIframeClicked"
+          />
+        </div>
+        <EventDescription :event="selectedEvent" class="description w-1/2" />
       </div>
-      <EventDescription :event="selectedEvent" class="description w-1/2" />
-    </template>
+    </div>
     <TimeTable
       :auto-scroll="autoScroll"
       :channels="channels"
@@ -23,7 +25,7 @@
       :hours-to-display="hoursToDisplay"
       :selected-event="selectedEvent"
       :show-inline-descriptions="$mq === 'sm'"
-      class="w-full"
+      class="flex-grow w-full"
       @eventClick="handleEventClick"
     />
     <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-30">
@@ -123,9 +125,6 @@ export default {
       return uniq(this.events.map((item) => item.channel))
         .filter((item) => item)
         .sort();
-    },
-    isShowingHeader() {
-      return process.env.SHOW_HEADER;
     },
     startTime() {
       return getNearestStartTime(this.currentTime);
@@ -227,25 +226,12 @@ export default {
 
 <style lang="scss" scoped>
 .time-table {
-  height: 100vh;
-
-  &.has-header {
-    height: calc(100vh - 4rem);
-  }
+  flex-grow: 1;
 }
 
 @media screen and (min-width: 768px) {
-  .time-table {
-    height: 50vh;
-  }
-
-  .video,
-  .description {
-    height: 50vh;
-
-    .has-header & {
-      height: calc(50vh - 4rem);
-    }
+  .header {
+    height: 60%;
   }
 }
 
