@@ -1,41 +1,24 @@
 <template>
   <header
-    class="bg-white border-t-8 border-red h-16 flex flex-col justify-center items-center px-4 relative w-full"
+    class="bg-white flex flex-col justify-center items-center pb-4 px-4 relative w-full"
   >
-    <div class="font-bold leading-tight text-xs">Presented By</div>
-    <div class="leading-tight">
-      <span class="sr-only">The Boston Globe</span>
-      <BostonGlobeLogo class="logo" />
-    </div>
-    <BadgeButton
-      class="absolute mr-4 right-0"
-      type="button"
-      title="About this project"
-      @click.stop="isShowingInfo = !isShowingInfo"
-    >
-      <span class="sr-only">About this project</span>
-      <InfoIcon />
-    </BadgeButton>
-    <InfoModal v-if="isShowingInfo" @close="isShowingInfo = false" />
+    <LiveGuideLogo :show-globe-logo="showGlobeLogo" class="w-32 md:w-48" />
+    <p class="font-sans mt-3 text-center text-xs">
+      Your daily guide to the best livestreams, virtual events, Globe’s critics’
+      picks, and more
+    </p>
   </header>
 </template>
 
 <script>
-import BadgeButton from '~/components/BadgeButton';
-import BostonGlobeLogo from '~/assets/Boston-Globe-Logo-Digital.svg';
-import InfoIcon from '~/assets/icons/info.svg';
-const InfoModal = () => import('~/components/InfoModal');
+import LiveGuideLogo from '~/components/LiveGuideLogo';
 
 export default {
-  components: { BadgeButton, BostonGlobeLogo, InfoIcon, InfoModal },
-  data() {
-    return { isShowingInfo: false };
+  components: { LiveGuideLogo },
+  computed: {
+    showGlobeLogo() {
+      return process.env.VARIANT !== 'globe';
+    },
   },
 };
 </script>
-
-<style scoped>
-.logo {
-  width: 150px;
-}
-</style>
