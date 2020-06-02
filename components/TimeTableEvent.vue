@@ -3,9 +3,9 @@
     :style="styles"
     class="time-table-event flex px-4 py-2 relative text-xs text-left z-10"
     :class="{
-      'bg-darker-gray text-white': !isSelected && !event.isFeatured,
+      'bg-white text-black': !event.isFeatured || isSelected,
       'bg-blue text-white': !isSelected && event.isFeatured,
-      'bg-white text-blue selected': isSelected,
+      selected: isSelected,
     }"
     type="button"
     v-bind="accessibilityProps"
