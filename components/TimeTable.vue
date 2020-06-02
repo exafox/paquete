@@ -216,7 +216,18 @@ $grid-gap: 5px;
 }
 
 .channel {
-  @apply bg-navy flex font-bold items-center justify-center left-0 p-2 sticky text-center text-sm text-yellow uppercase z-20;
+  @apply bg-black
+    flex
+    font-bold
+    items-center
+    justify-center
+    left-0
+    p-2
+    sticky
+    text-center
+    text-sm
+    text-white
+    uppercase z-20;
   grid-column: channels;
 
   // Horizontal grid lines
