@@ -7,11 +7,18 @@
   >
     <img
       v-if="props.showGlobeLogo"
-      class="mt-2"
+      class="mt-2 w-full"
       src="~/assets/globe-live-guide-logo.png"
       alt="The Boston Globe - LiveGuide"
+      :style="{ height: '35%' }"
     />
-    <img v-else src="~/assets/live-guide-logo.png" alt="LiveGuide" />
+    <img
+      v-else
+      src="~/assets/live-guide-logo.png"
+      alt="LiveGuide"
+      class="w-full"
+      :style="{ height: '22%' }"
+    />
   </div>
 </template>
 
