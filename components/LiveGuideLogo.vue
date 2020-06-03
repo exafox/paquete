@@ -7,6 +7,7 @@
   >
     <img
       v-if="props.showGlobeLogo"
+      class="mt-2"
       src="~/assets/globe-live-guide-logo.png"
       alt="The Boston Globe - LiveGuide"
     />
