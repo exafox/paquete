@@ -1,23 +1,22 @@
 <template functional>
   <div
-    :class="[data.class, data.staticClass]"
-    class="live-guide-logo inline-flex"
+    :class="[{ 'mt-2': props.showGlobeLogo }, data.class, data.staticClass]"
+    class="live-guide-logo inline-flex relative w-full"
     v-bind="$options.getAttributes({ data, parent })"
+    :style="{ height: 0, paddingTop: props.showGlobeLogo ? '35%' : '22%' }"
     v-on="listeners"
   >
     <img
       v-if="props.showGlobeLogo"
-      class="mt-2 w-full"
+      class="absolute inset-0"
       src="~/assets/globe-live-guide-logo.png"
       alt="The Boston Globe - LiveGuide"
-      :style="{ height: '35%' }"
     />
     <img
       v-else
       src="~/assets/live-guide-logo.png"
       alt="LiveGuide"
-      class="w-full"
-      :style="{ height: '22%' }"
+      class="absolute inset-0"
     />
   </div>
 </template>
