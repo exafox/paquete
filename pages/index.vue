@@ -47,7 +47,6 @@
       </FloatingButton>
       <FloatingButton
         title="Submit a stream"
-        class="mr-2"
         tag="a"
         href="https://forms.gle/AJTqLsaVjimqLPsv6"
         target="_blank"
@@ -55,15 +54,6 @@
       >
         <span class="sr-only">Submit a stream</span>
         <span class="relative font-medium text-4xl">+</span>
-      </FloatingButton>
-      <FloatingButton
-        title="Donate"
-        tag="button"
-        type="button"
-        @click="handleDonateClick"
-      >
-        <span class="sr-only">Donate</span>
-        <span class="relative text-2xl"><DonateIcon /></span>
       </FloatingButton>
     </div>
     <transition name="slow-fade">
@@ -78,7 +68,6 @@ import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
 import uniq from 'lodash/uniq';
 import BrandHeader from '~/components/BrandHeader';
-import DonateIcon from '~/assets/icons/donate.svg';
 import EventDescription from '~/components/EventDescription';
 import EventPreview from '~/components/EventPreview';
 import FloatingButton from '~/components/FloatingButton';
@@ -101,7 +90,6 @@ export default {
   name: 'Homepage',
   components: {
     BrandHeader,
-    DonateIcon,
     EventDescription,
     EventPreview,
     FloatingButton,
