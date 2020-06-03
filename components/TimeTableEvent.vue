@@ -12,6 +12,10 @@
     v-bind="accessibilityProps"
     @click="handleClick"
   >
+    <div
+      v-if="isSelected"
+      class="absolute block bg-black inset-y-0 left-0 pl-2"
+    />
     <div class="flex-grow">
       <VClamp
         class="font-bold text-sm"
@@ -112,11 +116,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.time-table-event.selected::before {
-  @apply absolute block bg-black inset-y-0 left-0 pl-2;
-  content: '';
-}
-
 .description {
   max-width: 60vw;
 
