@@ -3,8 +3,9 @@
     :style="styles"
     class="time-table-event flex px-4 py-2 relative text-xs text-left z-10"
     :class="{
-      'bg-white text-black': !event.isFeatured || isSelected,
+      'bg-darker-gray text-white': !isSelected && !event.isFeatured,
       'bg-blue text-white': !isSelected && event.isFeatured,
+      'bg-white text-black': isSelected,
       selected: isSelected,
     }"
     type="button"
@@ -112,7 +113,7 @@ export default {
 
 <style lang="scss" scoped>
 .time-table-event.selected::before {
-  @apply absolute block bg-blue inset-y-0 left-0 pl-2;
+  @apply absolute block bg-black inset-y-0 left-0 pl-2;
   content: '';
 }
 
