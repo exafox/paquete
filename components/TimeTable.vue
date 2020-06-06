@@ -8,7 +8,7 @@
     :style="tableStyles"
   >
     <!-- Timeslot Labels -->
-    <div ref="timeSlot" class="time-slot left-0 z-30">
+    <div ref="timeSlot" class="time-slot left-0 px-2 md:px-12 z-30">
       {{ formatDate(currentTime) }}
     </div>
     <div v-for="date in timeslots" :key="date.toISOString()" class="time-slot">
