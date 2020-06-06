@@ -8,7 +8,7 @@
     :style="tableStyles"
   >
     <!-- Timeslot Labels -->
-    <div ref="timeSlot" class="time-slot left-0 z-30">
+    <div ref="timeSlot" class="time-slot left-0 px-2 md:px-12 z-30">
       {{ formatDate(currentTime) }}
     </div>
     <div v-for="date in timeslots" :key="date.toISOString()" class="time-slot">
@@ -39,25 +39,27 @@
     />
 
     <!-- Cloned elements for infinite scrolling -->
-    <div
-      v-for="channel in channels"
-      :key="`${channel}-clone`"
-      :ref="`${channel}-clone`"
-      class="channel"
-      aria-hidden="true"
-    >
-      {{ channel }}
-    </div>
-    <TimeTableEvent
-      v-for="item in events"
-      :key="`${item.id}-clone`"
-      :event="item"
-      :is-clone="true"
-      :is-selected="selectedEvent === item"
-      :show-inline-description="showInlineDescriptions"
-      :time-table-start="startTime"
-      @click="$emit('eventClick', $event)"
-    />
+    <template v-if="infiniteScroll">
+      <div
+        v-for="channel in channels"
+        :key="`${channel}-clone`"
+        :ref="`${channel}-clone`"
+        class="channel"
+        aria-hidden="true"
+      >
+        {{ channel }}
+      </div>
+      <TimeTableEvent
+        v-for="item in events"
+        :key="`${item.id}-clone`"
+        :event="item"
+        :is-clone="true"
+        :is-selected="selectedEvent === item"
+        :show-inline-description="showInlineDescriptions"
+        :time-table-start="startTime"
+        @click="$emit('eventClick', $event)"
+      />
+    </template>
   </div>
 </template>
 
@@ -90,6 +92,10 @@ export default {
     hoursToDisplay: {
       type: Number,
       default: 6,
+    },
+    infiniteScroll: {
+      type: Boolean,
+      default: false,
     },
     selectedEvent: {
       type: Object,
@@ -135,26 +141,37 @@ export default {
           ...this.channels.map(
             (channel) => `[channel-${kebabCase(channel)}] auto`
           ),
-          ...this.channels.map(
-            (channel) => `[channel-${kebabCase(channel)}-clone] auto`
-          ),
+          ...(this.infiniteScroll
+            ? this.channels.map(
+                (channel) => `[channel-${kebabCase(channel)}-clone] auto`
+              )
+            : []),
         ].join(' '),
       };
     },
   },
-  created() {
-    this.interval = setInterval(() => {
-      if (!this.$refs.container) return;
-      const currentScrollTop = this.$refs.container.scrollTop;
-      const clonesHeight = this.getCloneHeight();
-      let newScrollTop = 1;
-      if (currentScrollTop <= 0) {
-        newScrollTop = clonesHeight;
-      } else if (currentScrollTop < clonesHeight) {
-        newScrollTop = currentScrollTop + (this.autoScroll ? 1 : 0);
-      }
-      this.$refs.container.scrollTop = newScrollTop;
-    }, 80);
+  watch: {
+    infiniteScroll: {
+      handler(newVal) {
+        if (newVal) {
+          this.interval = setInterval(() => {
+            if (!this.$refs.container) return;
+            const currentScrollTop = this.$refs.container.scrollTop;
+            const clonesHeight = this.getCloneHeight();
+            let newScrollTop = 1;
+            if (currentScrollTop <= 0) {
+              newScrollTop = clonesHeight;
+            } else if (currentScrollTop < clonesHeight) {
+              newScrollTop = currentScrollTop + (this.autoScroll ? 1 : 0);
+            }
+            this.$refs.container.scrollTop = newScrollTop;
+          }, 80);
+        } else {
+          clearInterval(this.interval);
+        }
+      },
+      immediate: true,
+    },
   },
   beforeDestroy() {
     clearInterval(this.interval);

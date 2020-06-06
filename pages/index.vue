@@ -18,6 +18,7 @@
     </div>
     <TimeTable
       :auto-scroll="autoScroll"
+      :infinite-scroll="infiniteScroll"
       :channels="channels"
       :events="upcomingEvents"
       :current-time="currentTime"
@@ -30,10 +31,10 @@
     />
     <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-30">
       <FloatingButton
+        v-if="infiniteScroll"
         :title="autoScroll ? 'Start auto-scrolling' : 'Stop auto-scrolling'"
         tag="button"
         type="button"
-        class="mr-2"
         @click="
           autoScroll = !autoScroll;
           hasTouchedAutoScroll = true;
@@ -46,6 +47,7 @@
         <div v-if="autoScroll" class="pause" />
       </FloatingButton>
       <FloatingButton
+        class="ml-2"
         title="Submit a stream"
         tag="a"
         href="https://forms.gle/AJTqLsaVjimqLPsv6"
@@ -74,7 +76,6 @@ import FloatingButton from '~/components/FloatingButton';
 import LoadingScreen from '~/components/LoadingScreen';
 import TimeTable from '~/components/TimeTable';
 import getNearestStartTime from '~/util/getNearestStartTime';
-import wait from '~/util/wait';
 import { fetchData } from '~/services/api';
 
 const DEFAULT_EVENT = {
@@ -114,6 +115,9 @@ export default {
         .filter((item) => item)
         .sort();
     },
+    infiniteScroll() {
+      return this.$mq !== 'sm';
+    },
     startTime() {
       return getNearestStartTime(this.currentTime);
     },
@@ -146,20 +150,18 @@ export default {
     },
   },
   async created() {
+    if (this.$mq !== 'sm') {
+      this.autoScroll = true;
+    }
+
     this.timeInterval = setInterval(() => {
       this.currentTime = new Date();
     }, 60000);
 
-    // Wait for the data, or at least one second - whichever is longer - so that
-    // folks can appreciate the loading screen. Might be a horrible idea.
-    const [events] = await Promise.all([fetchData(), wait(1000)]);
-
-    this.events = events;
-    this.isLoading = false;
+    this.events = await fetchData();
     this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
-    if (this.$mq !== 'sm') {
-      this.autoScroll = true;
-    }
+    await this.$nextTick();
+    this.isLoading = false;
   },
   beforeDestroy() {
     clearInterval(this.timeInterval);
