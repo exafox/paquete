@@ -24,7 +24,7 @@
       :start-time="startTime"
       :hours-to-display="hoursToDisplay"
       :selected-event="selectedEvent"
-      :show-inline-descriptions="$mq === 'sm'"
+      show-inline-descriptions
       class="flex-grow w-full"
       @eventClick="handleEventClick"
     />
