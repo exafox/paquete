@@ -39,9 +39,6 @@ export default {
           return `https://www.youtube.com/embed/${url.searchParams.get(
             'v'
           )}?autoplay=1&mute=1&rel=0`;
-        case 'www.livestream.com':
-        case 'livestream.com':
-          return `${this.event.link}/player?enableInfoAndActivity=true&autoPlay=true&mute=true`;
         case 'app.stitcher.com':
           return `https://app.stitcher.com/splayer/f/${url.pathname
             .split('/')
