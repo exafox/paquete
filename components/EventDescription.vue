@@ -13,9 +13,11 @@
           </div>
           <EventBadges :event="event" />
         </div>
-        <div v-if="event.description" class="mt-4 text-lg">
-          {{ event.description }}
-        </div>
+        <span
+          v-if="description"
+          class="block mt-4 text-lg whitespace-pre-line"
+          >{{ description }}</span
+        >
       </div>
       <EventLinks
         class="bg-white sticky bottom-0 mt-4 px-12 pb-12"
@@ -37,6 +39,11 @@ export default {
     event: {
       type: Object,
       default: null,
+    },
+  },
+  computed: {
+    description() {
+      return this.event.description ? this.event.description.trim() : null;
     },
   },
   methods: {
