@@ -1,6 +1,6 @@
 <template>
   <div
-    class="font-sans loading-screen flex items-center justify-center fixed inset-0 z-50"
+    class="font-sans loading-screen flex items-center justify-center fixed md:absolute inset-0 z-50"
   >
     <div class="loading" data-text="LOADING">LOADING</div>
     <StaticNoise />

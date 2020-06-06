@@ -16,19 +16,25 @@
         <EventDescription :event="selectedEvent" class="description w-1/2" />
       </div>
     </div>
-    <TimeTable
-      :auto-scroll="autoScroll"
-      :infinite-scroll="infiniteScroll"
-      :channels="channels"
-      :events="upcomingEvents"
-      :current-time="currentTime"
-      :start-time="startTime"
-      :hours-to-display="hoursToDisplay"
-      :selected-event="selectedEvent"
-      show-inline-descriptions
-      class="flex-grow w-full"
-      @eventClick="handleEventClick"
-    />
+    <div class="flex-grow overflow-hidden relative">
+      <transition name="slow-fade">
+        <LoadingScreen v-if="isLoading" />
+        <TimeTable
+          v-else
+          :auto-scroll="autoScroll"
+          :infinite-scroll="infiniteScroll"
+          :channels="channels"
+          :events="upcomingEvents"
+          :current-time="currentTime"
+          :start-time="startTime"
+          :hours-to-display="hoursToDisplay"
+          :selected-event="selectedEvent"
+          show-inline-descriptions
+          class="flex-grow w-full"
+          @eventClick="handleEventClick"
+        />
+      </transition>
+    </div>
     <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-30">
       <FloatingButton
         v-if="infiniteScroll"
@@ -58,9 +64,6 @@
         <span class="relative font-medium text-4xl">+</span>
       </FloatingButton>
     </div>
-    <transition name="slow-fade">
-      <LoadingScreen v-if="isLoading" />
-    </transition>
   </div>
 </template>
 
@@ -215,10 +218,6 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.time-table {
-  flex-grow: 1;
-}
-
 @media screen and (min-width: 768px) {
   .header {
     height: 60%;
