@@ -26,10 +26,10 @@
         >{{ startTime }} - {{ endTime }}</VClamp
       >
       <VClamp
-        v-if="event.description"
-        class="description"
+        v-if="description"
+        class="description whitespace-pre-line"
         :max-lines="showInlineDescription && isSelected ? 0 : 2"
-        >{{ event.description }}</VClamp
+        >{{ description }}</VClamp
       >
       <EventLinks
         v-if="showInlineDescription && isSelected"
@@ -79,6 +79,9 @@ export default {
   computed: {
     accessibilityProps() {
       return this.isClone ? { 'aria-hidden': 'true', tabindex: -1 } : {};
+    },
+    description() {
+      return this.event.description ? this.event.description.trim() : null;
     },
     endTime() {
       return formatDate(this.event.endTime);
