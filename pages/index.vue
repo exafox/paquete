@@ -8,7 +8,7 @@
       >
         <div class="video bg-black w-1/2 relative">
           <EventPreview
-            v-if="selectedEvent"
+            v-if="!isLoading && selectedEvent"
             :event="selectedEvent"
             @iframe-clicked="handleIframeClicked"
           />
