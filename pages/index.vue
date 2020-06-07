@@ -30,7 +30,7 @@
           :hours-to-display="hoursToDisplay"
           :selected-event="selectedEvent"
           show-inline-descriptions
-          class="flex-grow w-full"
+          class="absolute inset-0"
           @eventClick="handleEventClick"
         />
       </transition>
