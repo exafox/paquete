@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="event-description flex flex-col overflow-x-hidden overflow-y-auto"
-  >
+  <div class="event-description overflow-x-hidden overflow-y-auto">
     <template v-if="event">
       <div
-        class="flex flex-col flex-grow flex-shrink-0 items-start justify-center  p-12"
+        class="flex flex-col flex-grow flex-shrink-0 items-start justify-center p-12"
       >
         <div class="font-bold leading-none mb-4 text-3xl md:text-5xl font-bold">
           {{ event.title }}
@@ -22,7 +20,7 @@
         >
       </div>
       <EventLinks
-        class="bg-white sticky bottom-0 flex-shrink-0 mt-4 px-12 pb-12"
+        class="bg-white sticky bottom-0 flex-shrink-0 mt-auto px-12 pb-12"
         :event="event"
         size="lg"
       />
