@@ -75,7 +75,7 @@ export default {
   props: {
     autoScroll: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     channels: {
       type: Array,
@@ -114,6 +114,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      lastScroll: null,
+    };
+  },
   computed: {
     timeslots() {
       const results = [];
@@ -151,23 +156,12 @@ export default {
     },
   },
   watch: {
-    infiniteScroll: {
+    autoScroll: {
       handler(newVal) {
         if (newVal) {
-          this.interval = setInterval(() => {
-            if (!this.$refs.container) return;
-            const currentScrollTop = this.$refs.container.scrollTop;
-            const clonesHeight = this.getCloneHeight();
-            let newScrollTop = 1;
-            if (currentScrollTop <= 0) {
-              newScrollTop = clonesHeight;
-            } else if (currentScrollTop < clonesHeight) {
-              newScrollTop = currentScrollTop + (this.autoScroll ? 1 : 0);
-            }
-            this.$refs.container.scrollTop = newScrollTop;
-          }, 80);
+          window.requestAnimationFrame(this.autoScrollPage);
         } else {
-          clearInterval(this.interval);
+          this.lastScroll = null;
         }
       },
       immediate: true,
@@ -187,6 +181,33 @@ export default {
           return acc;
         }, 0) + this.$refs.timeSlot.offsetHeight
       );
+    },
+    autoScrollPage(timestamp) {
+      if (!this.infiniteScroll) return;
+      if (this.$refs.container) {
+        const currentScrollTop = this.$refs.container.scrollTop;
+        const clonesHeight = this.getCloneHeight();
+        if (!this.lastScroll) {
+          this.lastScroll = timestamp;
+        }
+        const elapsed = timestamp - this.lastScroll;
+
+        let newScrollTop = 1;
+        if (currentScrollTop <= 0) {
+          newScrollTop = clonesHeight;
+        } else if (currentScrollTop < clonesHeight) {
+          const increment = Math.round(0.01 * elapsed);
+          if (increment) {
+            this.lastScroll = timestamp;
+          }
+          newScrollTop = currentScrollTop + (this.autoScroll ? increment : 0);
+        }
+
+        this.$refs.container.scrollTop = newScrollTop;
+      }
+      if (this.autoScroll) {
+        window.requestAnimationFrame(this.autoScrollPage);
+      }
     },
   },
 };
@@ -210,13 +231,6 @@ $grid-gap: 5px;
 .time-slot {
   @apply flex items-center bg-blue font-bold justify-center px-12 py-1 sticky text-sm text-white top-0 whitespace-no-wrap z-30;
   grid-row: times;
-
-  &::after {
-    @apply absolute block bg-white inset-y-0;
-    content: '';
-    right: -$grid-gap;
-    width: $grid-gap;
-  }
 }
 
 .vertical-grid-line {
@@ -229,6 +243,10 @@ $grid-gap: 5px;
     height: 100vh;
     right: -$grid-gap;
     width: $grid-gap;
+
+    @media screen and (min-width: 768px) {
+      height: 40vh;
+    }
   }
 }
 
