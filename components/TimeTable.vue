@@ -4,6 +4,7 @@
     class="time-table bg-gray grid overflow-auto relative"
     :class="{
       'no-scroll-bars': !showScrollBars,
+      'infinite-scroll': infiniteScroll,
     }"
     :style="tableStyles"
   >
@@ -246,6 +247,10 @@ $grid-gap: 5px;
 
     @media screen and (min-width: 768px) {
       height: 40vh;
+
+      .infinite-scroll & {
+        height: 80vh;
+      }
     }
   }
 }
