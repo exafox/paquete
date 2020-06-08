@@ -123,7 +123,7 @@ export default {
       );
     },
     infiniteScroll() {
-      return this.$mq !== 'sm';
+      return this.$mq !== 'sm' && !navigator.appVersion.includes('Edge');
     },
     startTime() {
       return getNearestStartTime(this.currentTime);
@@ -157,18 +157,16 @@ export default {
     },
   },
   async created() {
-    if (this.$mq !== 'sm') {
-      this.autoScroll = true;
-    }
-
+    this.events = await fetchData();
+    await this.$nextTick();
+    this.isLoading = false;
+  },
+  mounted() {
+    this.autoScroll = this.infiniteScroll;
     this.timeInterval = setInterval(() => {
       this.currentTime = new Date();
     }, 60000);
-
-    this.events = await fetchData();
     this.randomizerInterval = setInterval(this.pickRandomEvent, 15000);
-    await this.$nextTick();
-    this.isLoading = false;
   },
   beforeDestroy() {
     clearInterval(this.timeInterval);
