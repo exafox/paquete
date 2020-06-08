@@ -68,6 +68,7 @@
 import addHours from 'date-fns/addHours';
 import isAfter from 'date-fns/isAfter';
 import isBefore from 'date-fns/isBefore';
+import isWithinInterval from 'date-fns/isWithinInterval';
 import uniq from 'lodash/uniq';
 import BrandHeader from '~/components/BrandHeader';
 import EventDescription from '~/components/EventDescription';
@@ -114,6 +115,12 @@ export default {
       return uniq(this.events.map((item) => item.channel))
         .filter((item) => item)
         .sort();
+    },
+    eventsHappeningNow() {
+      const now = new Date();
+      return this.events.filter((event) =>
+        isWithinInterval(now, { start: event.startTime, end: event.endTime })
+      );
     },
     infiniteScroll() {
       return this.$mq !== 'sm';
@@ -186,10 +193,16 @@ export default {
     },
     pickRandomEvent() {
       if (!this.upcomingEvents.length || this.$mq === 'sm') return;
-      const getNewEvent = () =>
-        this.upcomingEvents[
-          Math.floor(Math.random() * this.upcomingEvents.length)
-        ];
+
+      const getNewEvent = () => {
+        // We want to prioritize picking an event that is happening now if
+        // possible.
+        const eventPool =
+          this.eventsHappeningNow.length > 1
+            ? this.eventsHappeningNow
+            : this.upcomingEvents;
+        return eventPool[Math.floor(Math.random() * eventPool.length)];
+      };
       let newEvent;
       do {
         newEvent = getNewEvent();
