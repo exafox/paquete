@@ -30,6 +30,12 @@ export default {
   computed: {
     embedLink() {
       if (this.event.embedLink) {
+        const url = new URL(this.event.embedLink);
+        // Twitch requires that we include the domain of the embedding parent
+        // window. Add that here.
+        if (url.hostname === 'player.twitch.tv') {
+          return this.event.embedLink + `&parent=${window.location.hostname}`;
+        }
         return this.event.embedLink;
       }
       const url = new URL(this.event.link);
@@ -39,6 +45,11 @@ export default {
           return `https://www.youtube.com/embed/${url.searchParams.get(
             'v'
           )}?autoplay=1&mute=1&rel=0`;
+        case 'www.twitch.tv':
+          // Same issue as above of Twitch requiring the parent window's domain.
+          return `https://player.twitch.tv/?channel=${url.pathname
+            .split('/')
+            .find((seg) => seg)}?parent=${window.location.hostname}`;
         case 'app.stitcher.com':
           return `https://app.stitcher.com/splayer/f/${url.pathname
             .split('/')
