@@ -112,7 +112,10 @@ export default {
   },
   computed: {
     channels() {
-      return uniq(this.events.map((item) => item.channel))
+      const events = this.upcomingEvents.length
+        ? this.upcomingEvents
+        : this.events;
+      return uniq(events.map((item) => item.channel))
         .filter((item) => item)
         .sort();
     },
