@@ -1,66 +1,72 @@
 <template>
-  <div
-    ref="container"
-    class="time-table bg-gray grid overflow-auto relative"
-    :class="{
-      'no-scroll-bars': !showScrollBars,
-      'infinite-scroll': infiniteScroll,
-    }"
-    :style="tableStyles"
-  >
-    <!-- Timeslot Labels -->
-    <div ref="timeSlot" class="time-slot left-0 px-2 md:px-12 z-30">
-      {{ formatDate(currentTime) }}
-    </div>
-    <div v-for="date in timeslots" :key="date.toISOString()" class="time-slot">
-      {{ formatDate(date) }}
-    </div>
-
-    <!-- Vertical grid lines -->
+  <div class="time-table relative bg-gray">
     <div
-      v-for="date in timeslots"
-      :key="`grid-${date.toISOString()}`"
-      class="vertical-grid-line sticky top-0"
-    />
-
-    <!-- Channel Labels -->
-    <div v-for="channel in channels" :key="channel" class="channel">
-      {{ channel }}
-    </div>
-
-    <!-- Events -->
-    <TimeTableEvent
-      v-for="item in events"
-      :key="item.id"
-      :event="item"
-      :is-selected="selectedEvent === item"
-      :show-inline-description="showInlineDescriptions"
-      :time-table-start="startTime"
-      @click="$emit('eventClick', $event)"
-    />
-
-    <!-- Cloned elements for infinite scrolling -->
-    <template v-if="infiniteScroll">
+      ref="container"
+      class="time-table absolute inset-0 grid overflow-auto"
+      :class="{
+        'no-scroll-bars': !showScrollBars,
+        'infinite-scroll': infiniteScroll,
+      }"
+      :style="tableStyles"
+    >
+      <!-- Timeslot Labels -->
+      <div ref="timeSlot" class="time-slot left-0 px-2 md:px-12 z-30">
+        {{ formatDate(currentTime) }}
+      </div>
       <div
-        v-for="channel in channels"
-        :key="`${channel}-clone`"
-        :ref="`${channel}-clone`"
-        class="channel"
-        aria-hidden="true"
+        v-for="date in timeslots"
+        :key="date.toISOString()"
+        class="time-slot"
       >
+        {{ formatDate(date) }}
+      </div>
+
+      <!-- Vertical grid lines -->
+      <div
+        v-for="date in timeslots"
+        :key="`grid-${date.toISOString()}`"
+        class="vertical-grid-line sticky top-0"
+      />
+
+      <!-- Channel Labels -->
+      <div v-for="channel in channels" :key="channel" class="channel">
         {{ channel }}
       </div>
+
+      <!-- Events -->
       <TimeTableEvent
         v-for="item in events"
-        :key="`${item.id}-clone`"
+        :key="item.id"
         :event="item"
-        :is-clone="true"
         :is-selected="selectedEvent === item"
         :show-inline-description="showInlineDescriptions"
         :time-table-start="startTime"
         @click="$emit('eventClick', $event)"
       />
-    </template>
+
+      <!-- Cloned elements for infinite scrolling -->
+      <template v-if="infiniteScroll">
+        <div
+          v-for="channel in channels"
+          :key="`${channel}-clone`"
+          :ref="`${channel}-clone`"
+          class="channel"
+          aria-hidden="true"
+        >
+          {{ channel }}
+        </div>
+        <TimeTableEvent
+          v-for="item in events"
+          :key="`${item.id}-clone`"
+          :event="item"
+          :is-clone="true"
+          :is-selected="selectedEvent === item"
+          :show-inline-description="showInlineDescriptions"
+          :time-table-start="startTime"
+          @click="$emit('eventClick', $event)"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -217,11 +223,11 @@ export default {
 <style lang="scss" scoped>
 $grid-gap: 5px;
 
-.time-table {
+.time-table-body {
   grid-gap: $grid-gap;
 }
 
-.time-table.no-scroll-bars {
+.time-table-body.no-scroll-bars {
   -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
