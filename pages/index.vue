@@ -112,12 +112,20 @@ export default {
   },
   computed: {
     channels() {
-      const events = this.upcomingEvents.length
-        ? this.upcomingEvents
-        : this.events;
-      return uniq(events.map((item) => item.channel))
-        .filter((item) => item)
-        .sort();
+      // If most channels are active, show only active channels. Otherwise, show
+      // all channels so that the layout isn't empty
+      const activeChannels = uniq(
+        this.upcomingEvents.map((item) => item.channel)
+      ).filter((item) => item);
+      const allChannels = uniq(this.events.map((item) => item.channel)).filter(
+        (item) => item
+      );
+      const channelsToShow = Math.round(
+        activeChannels.length / allChannels.length
+      )
+        ? activeChannels
+        : allChannels;
+      return channelsToShow.sort();
     },
     eventsHappeningNow() {
       const now = new Date();

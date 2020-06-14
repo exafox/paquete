@@ -263,6 +263,7 @@ $grid-gap: 5px;
 
 .channel {
   @apply bg-black
+    box-content
     flex
     font-bold
     items-center
@@ -275,6 +276,7 @@ $grid-gap: 5px;
     text-white
     uppercase z-20;
   grid-column: channels;
+  min-height: 3em;
 
   // Horizontal grid lines
   &::after {
