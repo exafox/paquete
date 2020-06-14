@@ -2,7 +2,7 @@
   <div class="time-table relative bg-gray">
     <div
       ref="container"
-      class="time-table absolute inset-0 grid overflow-auto"
+      class="time-table-body absolute inset-0 grid overflow-auto"
       :class="{
         'no-scroll-bars': !showScrollBars,
         'infinite-scroll': infiniteScroll,
