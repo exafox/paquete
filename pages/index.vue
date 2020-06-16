@@ -157,6 +157,15 @@ export default {
         clearInterval(this.randomizerInterval);
       }
     },
+    isLoading(newVal) {
+      if (newVal) return;
+      if (this.$route.query.id) {
+        const foundActiveEvent = this.setActiveEvent(this.$route.query.id);
+        if (foundActiveEvent) {
+          this.hasTouchedTimeTable = true;
+        }
+      }
+    },
     $mq: {
       handler(newVal) {
         if (newVal === 'sm') {
@@ -177,9 +186,6 @@ export default {
     this.events = await fetchData();
     await this.$nextTick();
     this.isLoading = false;
-    if (this.$route.query.id) {
-      this.setActiveEvent(this.$route.query.id);
-    }
   },
   mounted() {
     this.autoScroll = this.infiniteScroll;
@@ -234,8 +240,10 @@ export default {
       const newEvent = this.upcomingEvents.find((event) => event.id === id);
       if (newEvent) {
         this.selectedEvent = newEvent;
+        return true;
       } else {
         this.$router.replace({ path: this.$route.path });
+        return false;
       }
     },
   },
