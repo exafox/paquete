@@ -30,7 +30,7 @@ export default {
       {
         hid: 'ogUrl',
         property: 'og:url',
-        content: 'https://www.liveguide.us',
+        content: process.env.BASE_URL,
       },
       {
         hid: 'ogImage',
@@ -45,7 +45,7 @@ export default {
       {
         hid: 'twUrl',
         property: 'twitter:url',
-        content: 'https://www.liveguide.us',
+        content: process.env.BASE_URL,
       },
       {
         hid: 'twTitle',
