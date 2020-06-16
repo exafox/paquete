@@ -1,17 +1,66 @@
+const metaTitle = 'LiveGuide, presented by The Boston Globe';
+const metaDescription =
+  "The Boston Globe is proud to present LiveGuide, your daily schedule of the latest livestreams and other content from around the internet. Stay tuned for entertainment, news, virtual events, and the Globe's critics' picks.";
+
 export default {
   mode: 'universal',
   /*
    ** Headers of the page
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'LiveGuide by The Boston Globe',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || '',
+        content: metaDescription,
+      },
+      {
+        hid: 'ogDescription',
+        property: 'og:description',
+        content: metaDescription,
+      },
+      {
+        hid: 'ogTitle',
+        property: 'og:title',
+        content: metaTitle,
+      },
+      {
+        hid: 'ogUrl',
+        property: 'og:url',
+        content: 'https://www.liveguide.us',
+      },
+      {
+        hid: 'ogImage',
+        property: 'og:image',
+        content: `${process.env.BASE_URL}/sm_preview_facebook.png`,
+      },
+      {
+        hid: 'twCard',
+        property: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        hid: 'twUrl',
+        property: 'twitter:url',
+        content: 'https://www.liveguide.us',
+      },
+      {
+        hid: 'twTitle',
+        property: 'twitter:title',
+        content: metaTitle,
+      },
+      {
+        hid: 'twDescription',
+        property: 'twitter:description',
+        content: metaDescription,
+      },
+      {
+        hid: 'twImage',
+        property: 'twitter:image',
+        content: `${process.env.BASE_URL}/sm_preview_twitter.png`,
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
