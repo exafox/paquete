@@ -82,7 +82,9 @@ import { fetchData } from '~/services/api';
 const DEFAULT_EVENT = {
   title: "Boston's still running",
   description: `Our streets may be empty, but we're still running at full force.
+
 The Boston Globe is partnering with local restaurants to serve those working on the front line in the fight against COVID-19.
+
 For each $10 contributed, we are enabling local restaurants to provide fresh-made meals to one of the many Boston-area hospitals.`,
   link: 'https://www.youtube.com/watch?time_continue=2&v=eyBP2SlwW8U',
   donationLink: 'https://manage.bostonglobe.com/order/da2/contribute.html',

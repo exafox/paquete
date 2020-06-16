@@ -10,7 +10,7 @@
       :size="size"
       @click.prevent="trackClick"
     >
-      {{ event.isAudio ? 'Listen' : 'Watch' }}
+      {{ mainCTA }}
     </BaseButton>
     <BaseButton
       v-if="event.descriptionLink"
@@ -55,6 +55,17 @@ export default {
     size: {
       type: String,
       default: 'sm',
+    },
+  },
+  computed: {
+    mainCTA() {
+      if (this.event.isAudio) {
+        return 'Listen';
+      }
+      if (this.event.requiresRegistration) {
+        return 'Register';
+      }
+      return 'Watch';
     },
   },
   methods: {

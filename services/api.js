@@ -41,6 +41,7 @@ const mapEntry = (entry) => {
   const isPaywall = get(entry, 'gsx$paywall.$t') === '1';
   const isCharity = get(entry, 'gsx$charity.$t') === '1';
   const isSponsored = get(entry, 'gsx$sponsored.$t') === '1';
+  const requiresRegistration = get(entry, 'gsx$registration.$t') === '1';
   const startTime = toDate(new Date(startTimeStr + ' EDT'), {
     timeZone: 'America/New_York',
   });
@@ -70,6 +71,7 @@ const mapEntry = (entry) => {
     isPaywall,
     isCharity,
     isSponsored,
+    requiresRegistration,
   };
 };
 
