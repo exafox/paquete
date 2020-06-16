@@ -225,7 +225,10 @@ export default {
       do {
         newEvent = getNewEvent();
       } while (newEvent === this.selectedEvent);
-      this.$router.replace({ path: this.$route.path, query: { id: event.id } });
+      this.$router.replace({
+        path: this.$route.path,
+        query: { id: newEvent.id },
+      });
     },
     setActiveEvent(id) {
       const newEvent = this.upcomingEvents.find((event) => event.id === id);
