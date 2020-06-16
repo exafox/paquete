@@ -30,12 +30,12 @@ export default {
       {
         hid: 'ogUrl',
         property: 'og:url',
-        content: process.env.BASE_URL,
+        content: process.env.URL,
       },
       {
         hid: 'ogImage',
         property: 'og:image',
-        content: `${process.env.BASE_URL}/sm_preview_facebook.png`,
+        content: `${process.env.URL}/sm_preview_facebook.png`,
       },
       {
         hid: 'twCard',
@@ -45,7 +45,7 @@ export default {
       {
         hid: 'twUrl',
         property: 'twitter:url',
-        content: process.env.BASE_URL,
+        content: process.env.URL,
       },
       {
         hid: 'twTitle',
@@ -60,7 +60,7 @@ export default {
       {
         hid: 'twImage',
         property: 'twitter:image',
-        content: `${process.env.BASE_URL}/sm_preview_twitter.png`,
+        content: `${process.env.URL}/sm_preview_twitter.png`,
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
