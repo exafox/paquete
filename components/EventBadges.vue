@@ -33,6 +33,14 @@
       <PaywallIcon />
     </BadgeButton>
     <BadgeButton
+      v-if="event.requiresRegistration"
+      tag="div"
+      class="mx-1"
+      title="Requires registration"
+    >
+      <RegistrationIcon />
+    </BadgeButton>
+    <BadgeButton
       v-if="event.isSponsored"
       tag="div"
       class="mx-1"
@@ -49,6 +57,7 @@ import AudioIcon from '~/assets/icons/audio.svg';
 import BadgeButton from '~/components/BadgeButton';
 import DonateIcon from '~/assets/icons/donate_sm.svg';
 import PaywallIcon from '~/assets/icons/paywall.svg';
+import RegistrationIcon from '~/assets/icons/registration.svg';
 import SponsoredIcon from '~/assets/icons/sponsored.svg';
 
 export default {
@@ -58,6 +67,7 @@ export default {
     BadgeButton,
     DonateIcon,
     PaywallIcon,
+    RegistrationIcon,
     SponsoredIcon,
   },
   props: {

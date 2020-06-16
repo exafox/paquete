@@ -10,7 +10,13 @@
       :size="size"
       @click.prevent="trackClick"
     >
-      {{ event.isAudio ? 'Listen' : 'Watch' }}
+      {{
+        event.isAudio
+          ? 'Listen'
+          : event.requiresRegistration
+          ? 'Register'
+          : 'Watch'
+      }}
     </BaseButton>
     <BaseButton
       v-if="event.descriptionLink"
