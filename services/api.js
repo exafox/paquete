@@ -2,6 +2,7 @@ import addMinutes from 'date-fns/addMinutes';
 import axios from 'axios';
 import get from 'lodash/get';
 import { toDate } from 'date-fns-tz';
+import hashString from '~/util/hashString';
 
 const url = process.env.SHEETS_URL;
 
@@ -27,7 +28,7 @@ const mapEntry = (entry) => {
   const startTimeStr = get(entry, 'gsx$starttime.$t', null);
   if (!title || !startTimeStr) return null;
 
-  const id = get(entry, 'id.$t', title);
+  const id = `${hashString(get(entry, 'id.$t', title))}`;
   const link = get(entry, 'gsx$streamlink.$t', '');
   const channel = get(entry, 'gsx$channel.$t', '');
   const description = get(entry, 'gsx$descriptionoptional.$t', '');

@@ -166,11 +166,20 @@ export default {
         }
       },
     },
+    '$route.query.id': {
+      handler(newVal) {
+        if (!newVal) return;
+        this.setActiveEvent(newVal);
+      },
+    },
   },
   async created() {
     this.events = await fetchData();
     await this.$nextTick();
     this.isLoading = false;
+    if (this.$route.query.id) {
+      this.setActiveEvent(this.$route.query.id);
+    }
   },
   mounted() {
     this.autoScroll = this.infiniteScroll;
@@ -193,7 +202,7 @@ export default {
       }
     },
     handleEventClick(event) {
-      this.selectedEvent = event;
+      this.$router.push({ path: this.$route.path, query: { id: event.id } });
       this.hasTouchedTimeTable = true;
       this.autoScroll = false;
     },
@@ -216,7 +225,15 @@ export default {
       do {
         newEvent = getNewEvent();
       } while (newEvent === this.selectedEvent);
-      this.selectedEvent = newEvent;
+      this.$router.replace({ path: this.$route.path, query: { id: event.id } });
+    },
+    setActiveEvent(id) {
+      const newEvent = this.upcomingEvents.find((event) => event.id === id);
+      if (newEvent) {
+        this.selectedEvent = newEvent;
+      } else {
+        this.$router.replace({ path: this.$route.path });
+      }
     },
   },
 };
