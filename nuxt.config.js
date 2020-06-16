@@ -104,6 +104,10 @@ export default {
     },
   },
   env: {
+    SHARE_DESCRIPTION: metaDescription,
+    SHARE_TITLE: metaTitle,
+    SHARE_URL:
+      process.env.SHARE_URL || process.env.URL || 'https://www.liveguide.us',
     SHEETS_URL: process.env.SHEETS_URL || '',
     VARIANT: process.env.VARIANT || '',
   },
