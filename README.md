@@ -36,13 +36,14 @@ When creating changes to the data schema (e.g. adding new columns to the spreads
 
 ## Deployment and Hosting
 
-This project is hosted on [Netlify](https://www.netlify.com/) and uses a Github-centric workflow. Any changes to `master` will trigger a rebuild and deployment using Nuxt's static generation method. A Gitub action is also used to push any changes made on the `master` branch to the `globe` and `demo` branches. A branch deploy for master will also be triggered on Netlify at this point. Finally, any pull requests attempting to merge into master will create a deploy preview in Netlify.
+This project is hosted on [Netlify](https://www.netlify.com/) and uses a Github-centric workflow. Any changes to `master` will trigger a rebuild and deployment using Nuxt's static generation method. A Gitub action is also used to push any changes made on the `master` branch to the `main`, `globe`, and `demo` branches. A branch deploy for master will also be triggered on Netlify at this point. Finally, any pull requests attempting to merge into master will create a deploy preview in Netlify.
 
 This gives us several environments.
 
 - [https://paquete.netlify.app/](https://paquete.netlify.app/) - Production code using production data
 - [https://globe--paquete.netlify.app/](https://globe--paquete.netlify.app/) - Production code using production data, but with environment variables that hide the branded header
 - [https://demo--paquete.netlify.app/](https://demo--paquete.netlify.app/) - Production code using test data
+- [https://www.liveguide.us](https://www.liveguide.us) - Production code using the `main` branch with production data on a separate Netlify project.
 - Deploy previews (urls vary and are avaialable within pull requests) - New code using test data
 
 Environment variables are used to specify which deployment context points to which data source. On Netlify, that's via the [netlify.toml file](https://github.com/exafox/paquete/blob/master/netlify.toml). In local development, that's via the `.env` file.
