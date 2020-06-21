@@ -160,8 +160,8 @@ export default {
     isLoading(newVal) {
       if (newVal) return;
       if (this.$route.query.id) {
-        const foundActiveEvent = this.setActiveEvent(this.$route.query.id);
-        if (foundActiveEvent) {
+        const newEvent = this.setActiveEvent(this.$route.query.id);
+        if (newEvent) {
           this.hasTouchedTimeTable = true;
         }
       }
@@ -240,11 +240,10 @@ export default {
       const newEvent = this.upcomingEvents.find((event) => event.id === id);
       if (newEvent) {
         this.selectedEvent = newEvent;
-        return true;
       } else {
         this.$router.replace({ path: this.$route.path });
-        return false;
       }
+      return newEvent;
     },
   },
 };
