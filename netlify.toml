@@ -8,7 +8,7 @@
 [context.globe.environment]
   GA_ID = "UA-165398200-2"
   GTM_ID = "GTM-MFGXDQZ"
-  SHARE_URL = "https://www.bostonglobe.com/liveguide/"
+  SHARE_URL = "https://www.bostonglobe.com/liveguide"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
   SHOW_EVENT_SHARING = "false"
   VARIANT = "globe"
