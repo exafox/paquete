@@ -7,12 +7,17 @@
 [context.globe.environment]
   GA_ID = "UA-165398200-2"
   GTM_ID = "GTM-MFGXDQZ"
+  SHARE_URL = "https://www.bostonglobe.com/liveguide/"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
   VARIANT = "globe"
 
 [context.main.environment]
   GA_ID = "UA-165398200-3"
   GTM_ID = "GTM-NZ5LXRN"
+  SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
+
+[context.master.environment]
+  SHARE_URL = "https://www.boston.com/liveguide"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
 
 [context.production.environment]
