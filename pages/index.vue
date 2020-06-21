@@ -80,6 +80,7 @@ import getNearestStartTime from '~/util/getNearestStartTime';
 import { fetchData } from '~/services/api';
 
 const DEFAULT_EVENT = {
+  id: '1',
   title: "Boston's still running",
   description: `Our streets may be empty, but we're still running at full force.
 
