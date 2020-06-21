@@ -104,6 +104,7 @@ export default {
     },
   },
   env: {
+    BASE_URL: process.env.BASE_URL || 'https://www.liveguide.us',
     SHARE_DESCRIPTION: metaDescription,
     SHARE_TITLE: metaTitle,
     SHARE_URL:
