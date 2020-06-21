@@ -1,6 +1,6 @@
 <template>
   <iframe
-    v-if="embedLink"
+    v-if="embedLink && isEmbeddable"
     :key="embedLink"
     ref="iframe"
     class="absolute inset-0 w-full h-full"
@@ -18,6 +18,7 @@
 <script>
 import isFinite from 'lodash/isFinite';
 import StaticNoise from '~/components/StaticNoise';
+import { fetchEmbeddableStatus } from '~/services/youtubeApi';
 
 export default {
   components: { StaticNoise },
@@ -26,6 +27,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      isEmbeddable: true,
+    };
   },
   computed: {
     embedLink() {
@@ -57,6 +63,20 @@ export default {
         default:
           return null;
       }
+    },
+  },
+  watch: {
+    embedLink: {
+      async handler(newVal) {
+        if (newVal && newVal.includes('youtube')) {
+          const url = new URL(this.event.link);
+          const vid = url.searchParams.get('v');
+          this.isEmbeddable = await fetchEmbeddableStatus(vid);
+        } else {
+          this.isEmbeddable = true;
+        }
+      },
+      immediate: true,
     },
   },
   mounted() {
