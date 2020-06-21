@@ -70,6 +70,7 @@
     <transition name="slow-fade">
       <LoadingScreen v-if="isLoading" />
     </transition>
+    <ShareModal v-if="isShareModalOpen" @close="isShareModalOpen = false" />
   </div>
 </template>
 
@@ -88,6 +89,8 @@ import ShareIcon from '~/assets/icons/share.svg';
 import TimeTable from '~/components/TimeTable';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import { fetchData } from '~/services/api';
+
+const ShareModal = () => import('~/components/ShareModal');
 
 const DEFAULT_EVENT = {
   title: "Boston's still running",
@@ -109,6 +112,7 @@ export default {
     FloatingButton,
     LoadingScreen,
     ShareIcon,
+    ShareModal,
     TimeTable,
   },
   data() {
@@ -237,8 +241,8 @@ export default {
             url: process.env.SHARE_URL,
           });
         } catch (err) {
-          // User cancelled out of sharing.
-          console.warn(err);
+          // User cancelled out of native browser sharing.
+          this.isShareModalOpen = true;
         }
       } else {
         this.isShareModalOpen = true;
