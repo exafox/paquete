@@ -159,6 +159,15 @@ export default {
         clearInterval(this.randomizerInterval);
       }
     },
+    isLoading(newVal) {
+      if (newVal) return;
+      if (this.$route.query.id) {
+        const newEvent = this.setActiveEvent(this.$route.query.id);
+        if (newEvent) {
+          this.hasTouchedTimeTable = true;
+        }
+      }
+    },
     $mq: {
       handler(newVal) {
         if (newVal === 'sm') {
@@ -166,6 +175,12 @@ export default {
         } else if (!this.hasTouchedAutoScroll) {
           this.autoScroll = true;
         }
+      },
+    },
+    '$route.query.id': {
+      handler(newVal) {
+        if (!newVal) return;
+        this.setActiveEvent(newVal);
       },
     },
   },
@@ -195,7 +210,7 @@ export default {
       }
     },
     handleEventClick(event) {
-      this.selectedEvent = event;
+      this.$router.push({ path: this.$route.path, query: { id: event.id } });
       this.hasTouchedTimeTable = true;
       this.autoScroll = false;
     },
@@ -218,8 +233,25 @@ export default {
       do {
         newEvent = getNewEvent();
       } while (newEvent === this.selectedEvent);
-      this.selectedEvent = newEvent;
+      this.$router.replace({
+        path: this.$route.path,
+        query: { id: newEvent.id },
+      });
     },
+    setActiveEvent(id) {
+      const newEvent = this.upcomingEvents.find((event) => event.id === id);
+      if (newEvent) {
+        this.selectedEvent = newEvent;
+      } else {
+        this.$router.replace({ path: this.$route.path });
+      }
+      return newEvent;
+    },
+  },
+  head() {
+    return {
+      link: [{ rel: 'canonical', href: `${process.env.BASE_URL}/` }],
+    };
   },
 };
 </script>
