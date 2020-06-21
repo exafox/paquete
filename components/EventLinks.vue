@@ -1,5 +1,5 @@
 <template>
-  <div class="event-links flex flex-wrap -mx-2">
+  <div class="event-links flex flex-wrap items-start -mx-2">
     <BaseButton
       v-if="event.link"
       tag="a"
@@ -38,6 +38,21 @@
     >
       Donate
     </BaseButton>
+    <BaseButton
+      v-if="isShareVisible"
+      class="mx-2 mb-2"
+      tag="button"
+      type="button"
+      variant="secondary"
+      :size="size"
+      @click="isShareModalOpen = true"
+      >Share</BaseButton
+    >
+    <ShareModal
+      v-if="isShareModalOpen"
+      v-bind="shareProps"
+      @close="isShareModalOpen = false"
+    />
   </div>
 </template>
 
@@ -45,8 +60,10 @@
 import BaseButton from '~/components/BaseButton';
 import TrackingEvents from '~/constants/TrackingEvents';
 
+const ShareModal = () => import('~/components/ShareModal');
+
 export default {
-  components: { BaseButton },
+  components: { BaseButton, ShareModal },
   props: {
     event: {
       type: Object,
@@ -57,7 +74,13 @@ export default {
       default: 'sm',
     },
   },
+  data() {
+    return { isShareModalOpen: false };
+  },
   computed: {
+    isShareVisible() {
+      return process.env.VARIANT === 'standalone';
+    },
     mainCTA() {
       if (this.event.isAudio) {
         return 'Listen';
@@ -66,6 +89,15 @@ export default {
         return 'Register';
       }
       return 'Watch';
+    },
+    shareProps() {
+      const { title, id } = this.event;
+      const shareCopy = `Watch "${title}" on ${process.env.SHARE_TITLE}`;
+      return {
+        title: shareCopy,
+        tweet: shareCopy,
+        url: `${process.env.SHARE_URL}?id=${id}`,
+      };
     },
   },
   methods: {

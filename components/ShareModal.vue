@@ -35,6 +35,10 @@ export default {
       type: String,
       default: process.env.SHARE_TITLE,
     },
+    tweet: {
+      type: String,
+      default: process.env.SHARE_DESCRIPTION,
+    },
     url: {
       type: String,
       default: process.env.SHARE_URL,
@@ -52,7 +56,7 @@ export default {
         {
           name: 'Twitter',
           link: `https://twitter.com/intent/tweet?${serializeObject({
-            text: this.description,
+            text: this.tweet,
             url: this.url,
           })}`,
         },

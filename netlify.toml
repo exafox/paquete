@@ -15,6 +15,7 @@
   GA_ID = "UA-165398200-3"
   GTM_ID = "GTM-NZ5LXRN"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
+  VARIANT = "standalone"
 
 [context.master.environment]
   SHARE_URL = "https://www.boston.com/liveguide"
