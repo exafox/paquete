@@ -2,23 +2,29 @@
   GA_ID = "UA-165398200-1"
   GTM_ID = "GTM-NG5QB9L"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/2/public/full?alt=json"
+  SHOW_EVENT_SHARING = "true"
 
+# https://globe--paquete.netlify.app/
 [context.globe.environment]
   GA_ID = "UA-165398200-2"
   GTM_ID = "GTM-MFGXDQZ"
   SHARE_URL = "https://www.bostonglobe.com/liveguide/"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
+  SHOW_EVENT_SHARING = "false"
   VARIANT = "globe"
 
+# https://www.liveguide.us/
 [context.main.environment]
   GA_ID = "UA-165398200-3"
   GTM_ID = "GTM-NZ5LXRN"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
-  VARIANT = "standalone"
 
+# https://paquete.netlify.app/
 [context.master.environment]
   SHARE_URL = "https://www.boston.com/liveguide"
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"
+  SHOW_EVENT_SHARING = "false"
 
+# https://paquete.netlify.app/ and https://www.liveguide.us/
 [context.production.environment]
   SHEETS_URL = "https://spreadsheets.google.com/feeds/list/1D5JBmEg1teTHy43Gu0lJqlTJCp_T3lmHljAO5l_tEwk/1/public/full?alt=json"

@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     isShareVisible() {
-      return process.env.VARIANT === 'standalone';
+      return process.env.SHOW_EVENT_SHARING === 'true';
     },
     mainCTA() {
       if (this.event.isAudio) {
