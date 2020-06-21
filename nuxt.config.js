@@ -55,6 +55,7 @@ export default {
     },
   },
   env: {
+    BASE_URL: process.env.BASE_URL || 'https://www.liveguide.us',
     SHEETS_URL: process.env.SHEETS_URL || '',
     VARIANT: process.env.VARIANT || '',
   },

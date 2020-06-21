@@ -246,6 +246,11 @@ export default {
       return newEvent;
     },
   },
+  head() {
+    return {
+      link: [{ rel: 'canonical', href: `${process.env.BASE_URL}/` }],
+    };
+  },
 };
 </script>
 
