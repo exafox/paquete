@@ -29,9 +29,9 @@
       />
 
       <!-- Channel Labels -->
-      <div v-for="channel in channels" :key="channel" class="channel">
+      <ChannelHeader v-for="channel in channels" :key="channel" class="channel">
         {{ channel }}
-      </div>
+      </ChannelHeader>
 
       <!-- Events -->
       <TimeTableEvent
@@ -39,14 +39,13 @@
         :key="item.id"
         :event="item"
         :is-selected="selectedEvent === item"
-        :show-inline-description="showInlineDescriptions"
         :time-table-start="startTime"
         @click="$emit('eventClick', $event)"
       />
 
       <!-- Cloned elements for infinite scrolling -->
       <template v-if="infiniteScroll">
-        <div
+        <ChannelHeader
           v-for="channel in channels"
           :key="`${channel}-clone`"
           :ref="`${channel}-clone`"
@@ -54,14 +53,13 @@
           aria-hidden="true"
         >
           {{ channel }}
-        </div>
+        </ChannelHeader>
         <TimeTableEvent
           v-for="item in events"
           :key="`${item.id}-clone`"
           :event="item"
           :is-clone="true"
           :is-selected="selectedEvent === item"
-          :show-inline-description="showInlineDescriptions"
           :time-table-start="startTime"
           @click="$emit('eventClick', $event)"
         />
@@ -74,11 +72,12 @@
 import addMinutes from 'date-fns/addMinutes';
 import kebabCase from 'lodash/kebabCase';
 import { format } from 'date-fns-tz';
+import ChannelHeader from '~/components/ChannelHeader';
 import TimeTableEvent from '~/components/TimeTableEvent';
 import formatDate from '~/util/formatDate';
 
 export default {
-  components: { TimeTableEvent },
+  components: { ChannelHeader, TimeTableEvent },
   props: {
     autoScroll: {
       type: Boolean,
@@ -107,10 +106,6 @@ export default {
     selectedEvent: {
       type: Object,
       default: null,
-    },
-    showInlineDescriptions: {
-      type: Boolean,
-      default: false,
     },
     showScrollBars: {
       type: Boolean,
@@ -262,19 +257,10 @@ $grid-gap: 5px;
 }
 
 .channel {
-  @apply bg-black
-    box-content
-    flex
-    font-bold
-    items-center
-    justify-center
+  @apply box-content
     left-0
-    p-2
     sticky
-    text-center
-    text-sm
-    text-white
-    uppercase z-20;
+    z-20;
   grid-column: channels;
   min-height: 3em;
 

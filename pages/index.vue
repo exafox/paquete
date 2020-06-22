@@ -1,22 +1,27 @@
 <template>
   <div class="flex flex-col h-screen">
-    <div class="header flex flex-col flex-shrink-0">
-      <BrandHeader class="flex-shrink-0" />
-      <div
-        v-if="$mq !== 'sm'"
-        class="flex flex-row-reverse flex-grow overflow-hidden"
-      >
-        <div class="video bg-black w-1/2 relative">
+    <!-- Brand header, and event preview + description. -->
+    <div class="header flex flex-col flex-shrink-0 sticky md:static top-0 z-10">
+      <BrandHeader v-if="isDesktop" class="flex-shrink-0" />
+      <div class="flex flex-grow overflow-hidden">
+        <div class="video bg-black relative w-full md:w-1/2">
           <EventPreview
             v-if="!isLoading && selectedEvent"
             :event="selectedEvent"
             @iframe-clicked="handleIframeClicked"
           />
         </div>
-        <EventDescription :event="selectedEvent" class="description w-1/2" />
+        <EventDescription
+          v-if="isDesktop"
+          :event="selectedEvent"
+          class="description  w-1/2"
+        />
       </div>
     </div>
+
+    <!-- Event listings -->
     <TimeTable
+      v-if="isDesktop"
       :auto-scroll="autoScroll"
       :infinite-scroll="infiniteScroll"
       :channels="channels"
@@ -25,10 +30,17 @@
       :start-time="startTime"
       :hours-to-display="hoursToDisplay"
       :selected-event="selectedEvent"
-      show-inline-descriptions
       class="flex-grow w-full"
       @eventClick="handleEventClick"
     />
+    <EventList
+      v-else
+      :events="eventsHappeningNow"
+      :selected-event="selectedEvent"
+      @eventClick="handleEventClick"
+    />
+
+    <!-- Control buttons -->
     <div class="fixed bottom-0 flex items-center right-0 mb-4 mr-8 z-30">
       <FloatingButton
         v-if="infiniteScroll"
@@ -58,6 +70,7 @@
         <span class="relative font-medium text-4xl">+</span>
       </FloatingButton>
     </div>
+
     <transition name="slow-fade">
       <LoadingScreen v-if="isLoading" />
     </transition>
@@ -75,9 +88,11 @@ import EventDescription from '~/components/EventDescription';
 import EventPreview from '~/components/EventPreview';
 import FloatingButton from '~/components/FloatingButton';
 import LoadingScreen from '~/components/LoadingScreen';
-import TimeTable from '~/components/TimeTable';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import { fetchData } from '~/services/api';
+
+const EventList = () => import('~/components/EventList');
+const TimeTable = () => import('~/components/TimeTable');
 
 const DEFAULT_EVENT = {
   id: '1',
@@ -96,6 +111,7 @@ export default {
   components: {
     BrandHeader,
     EventDescription,
+    EventList,
     EventPreview,
     FloatingButton,
     LoadingScreen,
@@ -114,20 +130,22 @@ export default {
     };
   },
   computed: {
+    allChannels() {
+      return uniq(this.events.map((item) => item.channel)).filter(
+        (item) => item
+      );
+    },
     channels() {
       // If most channels are active, show only active channels. Otherwise, show
       // all channels so that the layout isn't empty
       const activeChannels = uniq(
         this.upcomingEvents.map((item) => item.channel)
       ).filter((item) => item);
-      const allChannels = uniq(this.events.map((item) => item.channel)).filter(
-        (item) => item
-      );
       const channelsToShow = Math.round(
-        activeChannels.length / allChannels.length
+        activeChannels.length / this.allChannels.length
       )
         ? activeChannels
-        : allChannels;
+        : this.allChannels;
       return channelsToShow.sort();
     },
     eventsHappeningNow() {
@@ -136,8 +154,11 @@ export default {
         isWithinInterval(now, { start: event.startTime, end: event.endTime })
       );
     },
+    isDesktop() {
+      return this.$mq !== 'sm';
+    },
     infiniteScroll() {
-      return this.$mq !== 'sm' && !navigator.appVersion.includes('Edge');
+      return this.isDesktop && !navigator.appVersion.includes('Edge');
     },
     startTime() {
       return getNearestStartTime(this.currentTime);
@@ -202,14 +223,6 @@ export default {
     clearInterval(this.randomizerInterval);
   },
   methods: {
-    handleDonateClick() {
-      if (this.$mq === 'sm') {
-        window.open(DEFAULT_EVENT.donationLink);
-      } else {
-        this.handleEventClick(DEFAULT_EVENT);
-        this.autoScroll = true;
-      }
-    },
     handleEventClick(event) {
       this.$router.push({ path: this.$route.path, query: { id: event.id } });
       this.hasTouchedTimeTable = true;
@@ -272,6 +285,14 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.video {
+  padding-bottom: 56.25%;
+
+  @media screen and (min-width: 768px) {
+    padding-bottom: 0;
+  }
+}
+
 .time-table {
   flex-grow: 1;
 }
