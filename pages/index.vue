@@ -87,6 +87,7 @@ import FloatingButton from '~/components/FloatingButton';
 import LoadingScreen from '~/components/LoadingScreen';
 import ShareIcon from '~/assets/icons/share.svg';
 import TimeTable from '~/components/TimeTable';
+import TrackingEvents from '~/constants/TrackingEvents';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import { fetchData } from '~/services/api';
 
@@ -240,8 +241,12 @@ export default {
             title: process.env.SHARE_TITLE,
             url: process.env.SHARE_URL,
           });
-        } catch (err) {
-          // User cancelled out of native browser sharing.
+        } finally {
+          const trackingPayload = {
+            event: TrackingEvents.CLICKED_NATIVE_SHARE_LINK,
+            link: process.env.SHARE_URL,
+          };
+          this.$gtm.push(trackingPayload);
         }
       } else {
         this.isShareModalOpen = true;
