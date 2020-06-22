@@ -101,6 +101,24 @@ export default {
     },
   },
   methods: {
+    async handleShare() {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: this.shareProps.title,
+            url: this.shareProps.url,
+          });
+        } finally {
+          const trackingPayload = {
+            event: TrackingEvents.CLICKED_NATIVE_SHARE_LINK,
+            link: this.shareProps.url,
+          };
+          this.$gtm.push(trackingPayload);
+        }
+      } else {
+        this.isShareModalOpen = true;
+      }
+    },
     trackClick(e) {
       const link = e.currentTarget.href;
       const trackingPayload = {
