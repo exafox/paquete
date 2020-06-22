@@ -242,7 +242,6 @@ export default {
           });
         } catch (err) {
           // User cancelled out of native browser sharing.
-          this.isShareModalOpen = true;
         }
       } else {
         this.isShareModalOpen = true;
