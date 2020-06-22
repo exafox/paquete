@@ -118,6 +118,7 @@ export default {
   },
   data() {
     return {
+      cloneHeight: 0,
       lastScroll: null,
     };
   },
@@ -172,13 +173,17 @@ export default {
   beforeDestroy() {
     clearInterval(this.interval);
   },
+  updated() {
+    this.cloneHeight = this.getCloneHeight();
+  },
   methods: {
     formatDate,
     getCloneHeight() {
       return (
-        Object.entries(this.$refs).reduce((acc, [key, el]) => {
+        Object.entries(this.$refs).reduce((acc, [key, value]) => {
+          const el = value[0] && value[0].$el;
           if (key.includes('-clone') && el) {
-            acc += el[0].offsetHeight;
+            acc += el.offsetHeight;
           }
           return acc;
         }, 0) + this.$refs.timeSlot.offsetHeight
@@ -188,7 +193,7 @@ export default {
       if (!this.infiniteScroll) return;
       if (this.$refs.container) {
         const currentScrollTop = this.$refs.container.scrollTop;
-        const clonesHeight = this.getCloneHeight();
+        const clonesHeight = this.cloneHeight;
         if (!this.lastScroll) {
           this.lastScroll = timestamp;
         }

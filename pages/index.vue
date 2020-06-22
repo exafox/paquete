@@ -3,7 +3,7 @@
     <!-- Brand header, and event preview + description. -->
     <div class="header flex flex-col flex-shrink-0 sticky md:static top-0 z-10">
       <BrandHeader v-if="isDesktop" class="flex-shrink-0" />
-      <div class="flex flex-grow overflow-hidden">
+      <div class="flex flex-grow flex-row-reverse overflow-hidden">
         <div class="video bg-black relative w-full md:w-1/2">
           <EventPreview
             v-if="!isLoading && selectedEvent"
