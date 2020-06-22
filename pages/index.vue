@@ -93,6 +93,7 @@ import { fetchData } from '~/services/api';
 const ShareModal = () => import('~/components/ShareModal');
 
 const DEFAULT_EVENT = {
+  id: '1',
   title: "Boston's still running",
   description: `Our streets may be empty, but we're still running at full force.
 
