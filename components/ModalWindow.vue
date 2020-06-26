@@ -52,6 +52,5 @@ export default {
   overflow: auto;
   transform: translate(-50%, -50%);
   top: 50%;
-  width: 600px;
 }
 </style>
