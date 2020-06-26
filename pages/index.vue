@@ -57,10 +57,20 @@
         <span class="sr-only">Submit a stream</span>
         <span class="relative font-medium text-4xl">+</span>
       </FloatingButton>
+      <FloatingButton
+        class="ml-2 text-2xl"
+        title="Share"
+        type="button"
+        @click="handleShare"
+      >
+        <span class="sr-only">Share</span>
+        <ShareIcon class="share-icon" />
+      </FloatingButton>
     </div>
     <transition name="slow-fade">
       <LoadingScreen v-if="isLoading" />
     </transition>
+    <ShareModal v-if="isShareModalOpen" @close="isShareModalOpen = false" />
   </div>
 </template>
 
@@ -75,9 +85,13 @@ import EventDescription from '~/components/EventDescription';
 import EventPreview from '~/components/EventPreview';
 import FloatingButton from '~/components/FloatingButton';
 import LoadingScreen from '~/components/LoadingScreen';
+import ShareIcon from '~/assets/icons/share.svg';
 import TimeTable from '~/components/TimeTable';
+import TrackingEvents from '~/constants/TrackingEvents';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import { fetchData } from '~/services/api';
+
+const ShareModal = () => import('~/components/ShareModal');
 
 const DEFAULT_EVENT = {
   id: '1',
@@ -99,6 +113,8 @@ export default {
     EventPreview,
     FloatingButton,
     LoadingScreen,
+    ShareIcon,
+    ShareModal,
     TimeTable,
   },
   data() {
@@ -108,6 +124,7 @@ export default {
       events: [],
       hoursToDisplay: 6,
       isLoading: true,
+      isShareModalOpen: false,
       hasTouchedAutoScroll: false,
       hasTouchedTimeTable: false,
       selectedEvent: DEFAULT_EVENT,
@@ -218,6 +235,24 @@ export default {
     handleIframeClicked() {
       this.hasTouchedTimeTable = true;
     },
+    async handleShare() {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: process.env.SHARE_TITLE,
+            url: process.env.SHARE_URL,
+          });
+        } finally {
+          const trackingPayload = {
+            event: TrackingEvents.CLICKED_NATIVE_SHARE_LINK,
+            link: process.env.SHARE_URL,
+          };
+          this.$gtm.push(trackingPayload);
+        }
+      } else {
+        this.isShareModalOpen = true;
+      }
+    },
     pickRandomEvent() {
       if (!this.upcomingEvents.length || this.$mq === 'sm') return;
 
@@ -303,5 +338,10 @@ export default {
   &::before {
     @apply mr-1;
   }
+}
+
+.share-icon {
+  height: 1em;
+  width: 1em;
 }
 </style>
