@@ -46,7 +46,7 @@ const mapEntry = (entry) => {
   const startTime = toDate(new Date(startTimeStr + ' EDT'), {
     timeZone: 'America/New_York',
   });
-  const endTimeStr = get(entry, 'gsx$endtime.$t', null);
+  const endTimeStr = get(entry, 'gsx$endtimeoptional.$t', null);
   const duration = durationToMinutes(
     get(entry, 'gsx$durationoptional.$t') || '1:00'
   );
