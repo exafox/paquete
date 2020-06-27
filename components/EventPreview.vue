@@ -1,6 +1,6 @@
 <template>
   <iframe
-    v-if="embedLink && isEmbeddable"
+    v-if="embedLink"
     :key="embedLink"
     ref="iframe"
     class="absolute inset-0 w-full h-full"
@@ -30,21 +30,51 @@ export default {
   },
   data() {
     return {
-      isEmbeddable: true,
+      embedLink: null,
     };
   },
-  computed: {
-    embedLink() {
-      if (this.event.embedLink) {
-        const url = new URL(this.event.embedLink);
+  watch: {
+    event: {
+      async handler(newVal) {
+        let newEventLink = this.buildEmbedUrl(newVal);
+        if (newEventLink && newEventLink.includes('youtube')) {
+          const url = new URL(this.event.link);
+          const videoId = url.searchParams.get('v');
+          const isEmbeddable = await this.isYoutubeEmbeddable(videoId);
+          if (!isEmbeddable) {
+            newEventLink = null;
+          }
+        }
+        this.embedLink = newEventLink;
+      },
+      immediate: true,
+    },
+  },
+  mounted() {
+    if (!this.embedLink) return;
+    this.monitor = setInterval(() => {
+      const activeEl = document.activeElement;
+      if (activeEl === this.$refs.iframe) {
+        this.$emit('iframe-clicked');
+        clearInterval(this.monitor);
+      }
+    }, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.monitor);
+  },
+  methods: {
+    buildEmbedUrl(event) {
+      if (event.embedLink) {
+        const url = new URL(event.embedLink);
         // Twitch requires that we include the domain of the embedding parent
         // window. Add that here.
         if (url.hostname === 'player.twitch.tv') {
-          return this.event.embedLink + `&parent=${window.location.hostname}`;
+          return event.embedLink + `&parent=${window.location.hostname}`;
         }
-        return this.event.embedLink;
+        return event.embedLink;
       }
-      const url = new URL(this.event.link);
+      const url = new URL(event.link);
       switch (url.hostname) {
         case 'www.youtube.com':
         case 'youtube.com':
@@ -64,33 +94,13 @@ export default {
           return null;
       }
     },
-  },
-  watch: {
-    embedLink: {
-      async handler(newVal) {
-        if (newVal && newVal.includes('youtube')) {
-          const url = new URL(this.event.link);
-          const vid = url.searchParams.get('v');
-          this.isEmbeddable = await fetchEmbeddableStatus(vid);
-        } else {
-          this.isEmbeddable = true;
-        }
-      },
-      immediate: true,
-    },
-  },
-  mounted() {
-    if (!this.embedLink) return;
-    this.monitor = setInterval(() => {
-      const activeEl = document.activeElement;
-      if (activeEl === this.$refs.iframe) {
-        this.$emit('iframe-clicked');
-        clearInterval(this.monitor);
+    async isYoutubeEmbeddable(videoId) {
+      try {
+        return await fetchEmbeddableStatus(videoId);
+      } catch (err) {
+        return false;
       }
-    }, 1000);
-  },
-  beforeDestroy() {
-    clearInterval(this.monitor);
+    },
   },
 };
 </script>
