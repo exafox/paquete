@@ -1,13 +1,16 @@
 <template>
   <ModalWindow @close="$emit('close')">
     <h1 class="font-bold mb-4 text-xl">Share with:</h1>
-    <ul class="flex flex-col md:flex-row -mx-1">
-      <li v-for="item in shareLinks" :key="item.name" class="m-1">
+    <!-- Note: grid-flow-col will overflow container if number
+    of shareLinks gets long -->
+    <ul class="grid gap-2 md:grid-flow-col">
+      <li v-for="item in shareLinks" :key="item.name">
         <BaseButton
           tag="a"
           :href="item.link"
           target="_blank"
           rel="noopener noreferrer"
+          block
           @click.prevent="trackClick"
         >
           {{ item.name }}
@@ -35,6 +38,10 @@ export default {
       type: String,
       default: process.env.SHARE_TITLE,
     },
+    tweet: {
+      type: String,
+      default: process.env.SHARE_DESCRIPTION,
+    },
     url: {
       type: String,
       default: process.env.SHARE_URL,
@@ -52,7 +59,7 @@ export default {
         {
           name: 'Twitter',
           link: `https://twitter.com/intent/tweet?${serializeObject({
-            text: this.description,
+            text: this.tweet,
             url: this.url,
           })}`,
         },
