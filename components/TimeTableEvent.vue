@@ -1,59 +1,24 @@
 <template>
-  <button
+  <EventListing
+    :event="event"
+    :is-selected="isSelected"
     :style="styles"
-    class="time-table-event flex px-4 py-2 relative text-xs text-left z-10"
-    :class="{
-      'bg-darker-gray text-white': !isSelected && !event.isFeatured,
-      'bg-blue text-white': !isSelected && event.isFeatured,
-      'bg-white text-black': isSelected,
-      selected: isSelected,
-    }"
-    type="button"
+    class="time-table-event z-10"
     v-bind="accessibilityProps"
     @click="handleClick"
-  >
-    <div
-      v-if="isSelected"
-      class="absolute block bg-black inset-y-0 left-0 pl-2"
-    />
-    <div class="flex-grow">
-      <VClamp
-        class="font-bold text-sm"
-        :max-lines="showInlineDescription && isSelected ? 0 : 1"
-        >{{ event.title }}</VClamp
-      >
-      <VClamp :max-lines="showInlineDescription && isSelected ? 0 : 1"
-        >{{ startTime }} - {{ endTime }}</VClamp
-      >
-      <VClamp
-        v-if="description"
-        class="description whitespace-pre-line"
-        :max-lines="showInlineDescription && isSelected ? 0 : 2"
-        >{{ description }}</VClamp
-      >
-      <EventLinks
-        v-if="showInlineDescription && isSelected"
-        class="mt-4"
-        :event="event"
-      />
-    </div>
-    <FeaturedIcon v-if="event.isFeatured" class="flex-shrink-0 ml-1" />
-  </button>
+  />
 </template>
 
 <script>
-import VClamp from 'vue-clamp';
 import kebabCase from 'lodash/kebabCase';
 import { format } from 'date-fns-tz';
-import EventLinks from '~/components/EventLinks';
-import FeaturedIcon from '~/assets/icons/globeB.svg';
-import TrackingEvents from '~/constants/TrackingEvents';
+import EventListing from '~/components/EventListing';
 import formatDate from '~/util/formatDate';
 import getNearestStartTime from '~/util/getNearestStartTime';
 import getNearestEndTime from '~/util/getNearestEndTime';
 
 export default {
-  components: { EventLinks, FeaturedIcon, VClamp },
+  components: { EventListing },
   props: {
     event: {
       type: Object,
@@ -67,10 +32,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    showInlineDescription: {
-      type: Boolean,
-      default: false,
-    },
     timeTableStart: {
       type: Date,
       required: true,
@@ -79,9 +40,6 @@ export default {
   computed: {
     accessibilityProps() {
       return this.isClone ? { 'aria-hidden': 'true', tabindex: -1 } : {};
-    },
-    description() {
-      return this.event.description ? this.event.description.trim() : null;
     },
     endTime() {
       return formatDate(this.event.endTime);
@@ -106,24 +64,8 @@ export default {
   },
   methods: {
     handleClick() {
-      const trackingPayload = {
-        event: TrackingEvents.CLICKED_TIMETABLE_EVENT,
-        title: this.event.title,
-        date: this.event.startTime,
-      };
-      this.$gtm.push(trackingPayload);
       this.$emit('click', this.event);
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.description {
-  max-width: 60vw;
-
-  @media screen and (min-width: 768px) {
-    max-width: 80ch;
-  }
-}
-</style>
