@@ -110,6 +110,7 @@ export default {
     SHARE_URL:
       process.env.SHARE_URL || process.env.URL || 'https://www.liveguide.us',
     SHEETS_URL: process.env.SHEETS_URL || '',
+    SHOW_EVENT_SHARING: process.env.SHOW_EVENT_SHARING,
     VARIANT: process.env.VARIANT || '',
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY || '',
   },
