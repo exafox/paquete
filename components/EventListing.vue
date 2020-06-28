@@ -2,7 +2,7 @@
   <button
     class="flex px-4 py-2 relative text-xs text-left"
     :class="{
-      'bg-darker-gray text-white': !isSelected && !event.isFeatured,
+      'md:bg-darker-gray md:text-white': !isSelected && !event.isFeatured,
       'bg-blue text-white': !isSelected && event.isFeatured,
       'bg-white text-black': isSelected,
       selected: isSelected,
@@ -12,7 +12,7 @@
   >
     <div
       v-if="isSelected"
-      class="absolute block bg-black inset-y-0 left-0 pl-2"
+      class="absolute block bg-blue md:bg-black inset-y-0 left-0 pl-2"
     />
     <div class="flex-grow">
       <VClamp class="font-bold text-sm" :max-lines="isSelected ? 0 : 1">{{
