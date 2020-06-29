@@ -101,7 +101,9 @@ import LoadingScreen from '~/components/LoadingScreen';
 import ShareIcon from '~/assets/icons/share.svg';
 import TrackingEvents from '~/constants/TrackingEvents';
 import getNearestStartTime from '~/util/getNearestStartTime';
+import truncateDescription from '~/util/truncateDescription';
 import { fetchData } from '~/services/api';
+import { fetchLatestPlaylistVideos } from '~/services/youtubeApi';
 
 const EventList = () => import('~/components/EventList');
 const ShareModal = () => import('~/components/ShareModal');
@@ -224,6 +226,7 @@ export default {
   },
   async created() {
     this.events = await fetchData();
+    await this.setInitialEvent();
     await this.$nextTick();
     this.isLoading = false;
   },
@@ -239,6 +242,14 @@ export default {
     clearInterval(this.randomizerInterval);
   },
   methods: {
+    buildEventFromYoutubeVideoData({ videoId, title, description }) {
+      const event = {
+        title,
+        description: truncateDescription(description),
+        link: `https://www.youtube.com/watch?v=${videoId}`,
+      };
+      return event;
+    },
     handleEventClick(event) {
       this.$router.push({ path: this.$route.path, query: { id: event.id } });
       this.hasTouchedTimeTable = true;
@@ -294,6 +305,26 @@ export default {
         this.$router.replace({ path: this.$route.path });
       }
       return newEvent;
+    },
+    async setInitialEvent() {
+      try {
+        const data = await fetchLatestPlaylistVideos();
+        const latestUpload = data[0];
+        if (!latestUpload) {
+          this.selectedEvent = DEFAULT_EVENT;
+          return;
+        }
+
+        const { videoId } = latestUpload.contentDetails;
+        const { title, description } = latestUpload.snippet;
+        this.selectedEvent = this.buildEventFromYoutubeVideoData({
+          videoId,
+          title,
+          description,
+        });
+      } catch (err) {
+        this.selectedEvent = DEFAULT_EVENT;
+      }
     },
   },
   head() {
