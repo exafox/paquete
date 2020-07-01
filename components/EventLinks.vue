@@ -46,7 +46,7 @@
       variant="secondary"
       :size="size"
       @click="isShareModalOpen = true"
-      >Share</BaseButton
+      >Invite friends</BaseButton
     >
     <ShareModal
       v-if="isShareModalOpen"
