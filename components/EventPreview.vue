@@ -51,8 +51,8 @@ export default {
     },
   },
   mounted() {
-    if (!this.embedLink) return;
     this.monitor = setInterval(() => {
+      if (!this.embedLink) return;
       const activeEl = document.activeElement;
       if (activeEl === this.$refs.iframe) {
         this.$emit('iframe-clicked');
